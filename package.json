@@ -1,0 +1,37 @@
+{
+  "name": "htz-commons-lib",
+  "version": "1.0.0",
+  "description": "A suite of different libraries that allow you to ensure values of certain types",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --d",
+    "test": "jest --config jestconfig.json",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test && npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "author": "Marcio Reis <hello@marcioreis.pt>",
+  "license": "ISC",
+  "files": [
+    "dist/**/*",
+    "dist/index.d.ts"
+  ],
+  "devDependencies": {
+    "@types/jest": "^24.0.11",
+    "@types/moment": "^2.13.0",
+    "jest": "^24.7.1",
+    "prettier": "^1.17.0",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.15.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.4.3"
+  },
+  "dependencies": {
+    "moment": "^2.24.0"
+  }
+}
