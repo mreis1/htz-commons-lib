@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/mreis1/htz-padding.svg?branch=master)](https://travis-ci.org/mreis1/htz-padding)
+[![Build Status](https://travis-ci.com/mreis1/htz-commons-lib.svg?token=hWQmAaR3kAdv8uivTTas&branch=master)](https://travis-ci.com/mreis1/htz-commons-lib)
 
 
 # htz-commons-lib
