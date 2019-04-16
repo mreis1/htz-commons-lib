@@ -2,21 +2,10 @@
 
 
 # htz-commons-lib
-A small, dependency free lib to pad some strings
+
 
 
 ### Install
 
-`$ npm install htz-padding`
+`$ npm install htz-commons-lib`
 
-### Usage
-
-```
-import {paddingLeft} from 'htz-padding';
-
-paddingLeft('hello', 5, '0');
-// Outputs 0hello
-
-paddingRight('hello', 5, '0');
-// Outputs hello0
-```
