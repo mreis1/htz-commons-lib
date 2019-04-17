@@ -5,11 +5,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "echo \"Building....\" && rimraf ./dist && tsc --d",
+    "build": "rimraf ./dist && tsc --d",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "prepare": "echo \"Preparing....\" && npm run build -- --conf=tsconfig-package.json",
+    "prepare": "echo \"Preparing....\" && tsc --d --conf=tsconfig-package.json",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
