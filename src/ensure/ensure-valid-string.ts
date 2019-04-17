@@ -10,13 +10,12 @@ interface IEnsureValidStringOpts {
     transform?: ('none' | 'upperCase' | 'lowerCase')
 }
 
-export function ensureValidString(str: string, options?: IEnsureValidStringOpts)
-export function ensureValidString(str: string, defaultValue?: string)
-export function ensureValidString(str: string, defaultValueOrOptions?: any) {
+
+export function ensureValidString(str: string, defaultValueOrOptions?: IEnsureValidStringOpts | string) {
     let defaultValue;
     let minLength;
     let options: IEnsureValidStringOpts;
-    options = isObject(defaultValueOrOptions) ? defaultValueOrOptions : null;
+    options = isObject(defaultValueOrOptions) ? defaultValueOrOptions as IEnsureValidStringOpts: null;
     if (options) {
         minLength = ensureValidNumber(options.minLength, 1);
         defaultValue = options.defaultValue;
