@@ -14,7 +14,7 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "postinstall": "cpx ./dist/**/* ./ && rm -rf ./dist"
+    "postinstall": "cpx ./node_modules/htz-common-lib/dist/**/* ./ && rm -rf ./node_modules/htz-common-lib/"
   },
   "author": "Marcio Reis <hello@marcioreis.pt>",
   "license": "ISC",
