@@ -8,15 +8,15 @@
  * @param fallback
  * @returns {any}
  */
-export function ensureValidNumber(value:any, fallback?){
-    if (value !== void 0 && value != null){
-        const parsed = parseInt(value, 0);
-        if (isNaN(parsed)){
-            return fallback;
-        } else {
-            return parsed;
-        }
+export function ensureValidNumber(value: any, fallback?) {
+  if (value !== void 0 && value != null) {
+    const parsed = parseInt(value, 0);
+    if (isNaN(parsed)) {
+      return fallback;
     } else {
-        return fallback;
+      return parsed;
     }
+  } else {
+    return fallback;
+  }
 }

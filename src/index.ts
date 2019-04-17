@@ -4,8 +4,6 @@
  * @param fallback
  * @returns {any}
  */
-import * as ensure from './ensure'
+import * as ensure from "./ensure";
 
-export {
-    ensure
-}
+export { ensure };

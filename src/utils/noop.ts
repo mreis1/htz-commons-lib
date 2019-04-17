@@ -1,3 +1,3 @@
 export function noop(...args) {
-    // nothing to do
+  // nothing to do
 }
