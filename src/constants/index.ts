@@ -1,1 +1,1 @@
-export * from "./parity";
+export * from './parity';

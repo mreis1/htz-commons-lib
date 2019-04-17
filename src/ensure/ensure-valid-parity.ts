@@ -1,4 +1,4 @@
-import { PARITY } from "../constants/parity";
+import { PARITY } from '../constants/parity';
 
 const accepted: PARITY[] = [
   PARITY.none,

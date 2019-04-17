@@ -5,9 +5,9 @@
  */
 export function hexToBuffer(value) {
   const type = typeof value;
-  if (type === "string") {
-    return Buffer.from(value, "hex");
-  } else if (type === "object") {
+  if (type === 'string') {
+    return Buffer.from(value, 'hex');
+  } else if (type === 'object') {
     if (Buffer.isBuffer(value)) {
       return value;
     }

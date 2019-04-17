@@ -1,4 +1,4 @@
-import { Deferred } from "./deferred";
+import { Deferred } from './deferred';
 
 /**
  * A small utility class that allows you to generate a promise

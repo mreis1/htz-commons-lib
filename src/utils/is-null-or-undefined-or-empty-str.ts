@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "./is-null-or-undefined";
+import { isNullOrUndefined } from './is-null-or-undefined';
 
 export function isNullOrUndefinedOrEmptyStr(
   str: string,
@@ -6,8 +6,8 @@ export function isNullOrUndefinedOrEmptyStr(
 ) {
   if (isNullOrUndefined(str)) {
     return true;
-  } else if (typeof str === "string") {
-    return str.trim() === "";
+  } else if (typeof str === 'string') {
+    return str.trim() === '';
   } else {
     return true;
   }

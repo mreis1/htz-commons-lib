@@ -1,5 +1,5 @@
-import { isObject } from "../utils/is-object";
-import { ensureValidNumber } from "./ensure-valid-number";
+import { isObject } from '../utils/is-object';
+import { ensureValidNumber } from './ensure-valid-number';
 
 interface IEnsureValidStringOpts {
   defaultValue?: any;
@@ -7,7 +7,7 @@ interface IEnsureValidStringOpts {
   accepts?: string[];
   rejects?: string[];
   // Either we should or not transform the string before comparing it with the accepted values
-  transform?: "none" | "upperCase" | "lowerCase";
+  transform?: 'none' | 'upperCase' | 'lowerCase';
 }
 
 export function ensureValidString(
@@ -27,12 +27,12 @@ export function ensureValidString(
     minLength = 1;
     defaultValue = defaultValueOrOptions;
   }
-  if (typeof str === "string" && str.length >= minLength) {
+  if (typeof str === 'string' && str.length >= minLength) {
     if (options) {
       if (options.transform) {
-        if (options.transform === "lowerCase") {
+        if (options.transform === 'lowerCase') {
           str = str.toLowerCase();
-        } else if (options.transform === "upperCase") {
+        } else if (options.transform === 'upperCase') {
           str = str.toUpperCase();
         } else {
           str = str.toLowerCase();
