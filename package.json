@@ -5,7 +5,7 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "build": "rimraf ./dist && tsc --d",
+    "build": "rimraf ./dist && tsc --d --project tsconfig.json",
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" --single-quote=true",
     "lint": "tslint -p tsconfig.json",
