@@ -14,7 +14,7 @@
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
     "postversion": "git push && git push --tags",
-    "install": "cpx ./dist/**/* ./ && rm -rf ./dist"
+    "postinstall": "cpx ./dist/**/* ./ && rm -rf ./dist"
   },
   "author": "Marcio Reis <hello@marcioreis.pt>",
   "license": "ISC",
