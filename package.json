@@ -13,7 +13,8 @@
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags"
+    "postversion": "git push && git push --tags",
+    "install": "cpx ./dist/**/* ./ && rm -rf ./dist"
   },
   "author": "Marcio Reis <hello@marcioreis.pt>",
   "license": "ISC",
@@ -24,6 +25,7 @@
     "@types/jest": "^24.0.11",
     "@types/moment": "^2.13.0",
     "@types/node": "^8.10.4",
+    "cpy-cli": "^2.0.0",
     "jest": "^24.7.1",
     "prettier": "^1.17.0",
     "rimraf": "^2.6.3",
@@ -33,6 +35,7 @@
     "typescript": "^3.4.3"
   },
   "dependencies": {
+    "cpx": "^1.5.0",
     "moment": "^2.24.0"
   }
 }
