@@ -9,12 +9,11 @@
     "test": "jest --config jestconfig.json",
     "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\"",
     "lint": "tslint -p tsconfig.json",
-    "prepare": "npm run build",
+    "prepare": "npm run build && cpx ./dist/**/* ./ && rm -rf ./dist/",
     "prepublishOnly": "npm test && npm run lint",
     "preversion": "npm run lint",
     "version": "npm run format && git add -A src",
-    "postversion": "git push && git push --tags",
-    "postinstall": "cpx ./node_modules/htz-common-lib/dist/**/* ./ && rm -rf ./node_modules/htz-common-lib/dist/"
+    "postversion": "git push && git push --tags"
   },
   "author": "Marcio Reis <hello@marcioreis.pt>",
   "license": "ISC",
