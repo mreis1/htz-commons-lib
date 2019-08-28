@@ -9,10 +9,10 @@ enum Operation {
 }
 
 export interface ISqlBuilderCondition {
-  type: Type,
-  operation: Operation,
-  value?: any,
-  builder?: SqlBuilder
+  type: Type;
+  operation: Operation;
+  value?: any;
+  builder?: SqlBuilder;
 }
 
 export class SqlBuilder {
@@ -57,13 +57,13 @@ export class SqlBuilder {
 
   public toString(options: { where: boolean }) {
     let strArr = [];
-    let str = "";
-    this.conditions.forEach((condition) => {
-      let operator = condition.operation === Operation.AND ? "AND" : "OR";
+    let str = '';
+    this.conditions.forEach(condition => {
+      let operator = condition.operation === Operation.AND ? 'AND' : 'OR';
       if (condition.type === Type.GROUP) {
         let v = condition.builder.toString({ where: false });
         if (v) {
-          strArr.push([operator, "(" + v + ")"]);
+          strArr.push([operator, '(' + v + ')']);
         }
       } else if (condition.type === Type.QUERY) {
         strArr.push([operator, condition.value]);
@@ -74,13 +74,13 @@ export class SqlBuilder {
       strArr[0].shift();
     }
 
-    strArr.forEach((item) => {
-      let part = ` ${item.join(" ")}`;
+    strArr.forEach(item => {
+      let part = ` ${item.join(' ')}`;
       str += part;
     });
 
     if (options && options.where && str) {
-      str = " WHERE " + str + " ";
+      str = ' WHERE ' + str + ' ';
     }
 
     return str;
