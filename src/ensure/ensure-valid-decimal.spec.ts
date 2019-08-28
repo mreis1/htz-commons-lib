@@ -5,4 +5,8 @@ describe('ensure-valid-decimal.spec.ts', function() {
     var result = ensureValidDecimal('123,23');
     expect(result).toBe(123.23);
   });
+  test('Handles negative numbers', function() {
+    var result = ensureValidDecimal('-123,23');
+    expect(result).toBe(-123.23);
+  });
 });
