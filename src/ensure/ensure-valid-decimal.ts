@@ -4,15 +4,19 @@
  * @param defaultValue
  * @param options
  */
-export function ensureValidDecimal(value: any, defaultValue?, options?: { replaceComma?: boolean }) {
+export function ensureValidDecimal(
+  value: any,
+  defaultValue?,
+  options?: { replaceComma?: boolean }
+) {
   const t = typeof value;
   options = options || { replaceComma: true };
-  if (typeof options.replaceComma !== "boolean") {
+  if (typeof options.replaceComma !== 'boolean') {
     options.replaceComma = true;
   }
-  if (t === "string") {
+  if (t === 'string') {
     try {
-      value = value.replace(/,/g, ".");
+      value = value.replace(/,/g, '.');
       /**
        * I use JSON parse instead of parse float because
        *
@@ -27,7 +31,7 @@ export function ensureValidDecimal(value: any, defaultValue?, options?: { replac
     } catch (err) {
       return defaultValue;
     }
-  } else if (t === "number" && !isNaN(value)) {
+  } else if (t === 'number' && !isNaN(value)) {
     return value;
   } else {
     return defaultValue;
