@@ -8,7 +8,7 @@
     "build": "rimraf ./dist && tsc --d --project tsconfig.json",
     "test": "jest --config jestconfig.json",
     "test:xpec": "jest --config jestconfig-xpec.json",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" --single-quote=true",
+    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" --config=.prettierrc",
     "lint": "tslint -p tsconfig.json",
     "prepare": "tsc --d --project tsconfig-config.json",
     "prepublishOnly": "npm test && npm run lint",
