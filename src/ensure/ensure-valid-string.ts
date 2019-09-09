@@ -29,13 +29,6 @@ export function ensureValidString(
       options.replace.forEach(item => {
         let b = str;
         str = str.replace(item.exp, item.value);
-        console.log('---------------------------------');
-        console.log({
-          b,
-          str,
-          item
-        });
-        console.log('---------------------------------');
       });
     }
     minLength = ensureValidNumber(options.minLength, 1);
