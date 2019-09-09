@@ -1,7 +1,11 @@
-import { isObject } from '../utils/is-object';
+import { isObject } from '../utils';
 import { ensureValidNumber } from './ensure-valid-number';
 
 interface IEnsureValidStringOpts {
+  /**
+   * Will run character replacement before checking min-length
+   */
+  replace?: Array<{exp: RegExp | string, value: string }>,
   defaultValue?: any;
   minLength?: number;
   accepts?: string[];
@@ -21,6 +25,17 @@ export function ensureValidString(
     ? (defaultValueOrOptions as IEnsureValidStringOpts)
     : null;
   if (options) {
+    if (Array.isArray(options.replace) && options.replace.length) {
+      options.replace.forEach(item => {
+        let b = str;
+        str = str.replace(item.exp, item.value);
+        console.log('---------------------------------');
+        console.log({
+          b, str, item
+        });
+        console.log('---------------------------------');
+      });
+    }
     minLength = ensureValidNumber(options.minLength, 1);
     defaultValue = options.defaultValue;
   } else {
