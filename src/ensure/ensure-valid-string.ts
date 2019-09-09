@@ -5,7 +5,7 @@ interface IEnsureValidStringOpts {
   /**
    * Will run character replacement before checking min-length
    */
-  replace?: Array<{exp: RegExp | string, value: string }>,
+  replace?: Array<{ exp: RegExp | string; value: string }>;
   defaultValue?: any;
   minLength?: number;
   accepts?: string[];
@@ -31,7 +31,9 @@ export function ensureValidString(
         str = str.replace(item.exp, item.value);
         console.log('---------------------------------');
         console.log({
-          b, str, item
+          b,
+          str,
+          item
         });
         console.log('---------------------------------');
       });
