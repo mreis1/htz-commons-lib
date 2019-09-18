@@ -25,7 +25,11 @@ export function ensureValidString(
     ? (defaultValueOrOptions as IEnsureValidStringOpts)
     : null;
   if (options) {
-    if (typeof str === 'string' && Array.isArray(options.replace) && options.replace.length) {
+    if (
+      typeof str === 'string' &&
+      Array.isArray(options.replace) &&
+      options.replace.length
+    ) {
       options.replace.forEach(item => {
         let b = str;
         str = str.replace(item.exp, item.value);
