@@ -1,5 +1,16 @@
 import { ensureValidString } from './ensure-valid-string';
 describe('EnsureValidString', () => {
+  test('Should not throw if value is undefined and there no defaultValue assigned', () => {
+    let str = undefined;
+    expect(() => {
+      str = ensureValidString(str, {
+        replace: [
+          { exp: new RegExp('(\\s|-|_)+', 'gi'), value: '' },
+          { exp: new RegExp('([\\d+]{3})+', 'gi'), value: '' }
+        ]
+      });
+    }).not.toThrow();
+  });
   test('Should set a default value if the string is null or undefined', () => {
     let str = null;
     str = ensureValidString(str, {
