@@ -8,7 +8,11 @@ import { ensureValidDecimal } from './ensure-valid-decimal';
  * @param options
  * @param options.decimals  (default: false)
  */
-export function ensureArrayOfNumbers(data: any[], defaultValue?, options?: { decimals: boolean }) {
+export function ensureArrayOfNumbers(
+  data: any[],
+  defaultValue?,
+  options?: { decimals: boolean }
+) {
   options = options || { decimals: false };
   if (Array.isArray(data)) {
     return data
