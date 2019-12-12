@@ -1,6 +1,6 @@
 {
   "name": "htz-commons-lib",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "A suite of different libraries that allow you to ensure values of certain types",
   "main": "index.js",
   "types": "index.d.ts",
@@ -24,7 +24,7 @@
     "@types/node": "^8.10.4",
     "cpy-cli": "^2.0.0",
     "jest": "^24.7.1",
-    "prettier": "^1.17.0",
+    "prettier": "^1.19.1",
     "rimraf": "^2.6.3",
     "ts-jest": "^24.0.2",
     "tslint": "^5.15.0",
