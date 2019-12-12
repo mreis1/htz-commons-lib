@@ -9,7 +9,11 @@
  * @param options.convertDecimal  {boolean} (false)   Either a decimal string should be converted to integer (Example: '11.11' => 11)
  * @returns {any}
  */
-export function ensureValidNumber(value: any, fallback?, options?: { convertDecimal: boolean; }) {
+export function ensureValidNumber(
+  value: any,
+  fallback?,
+  options?: { convertDecimal: boolean }
+) {
   if (value !== void 0 && value != null) {
     let t = typeof value;
     if (t === 'string') {
@@ -41,7 +45,7 @@ export function ensureValidNumber(value: any, fallback?, options?: { convertDeci
       if (isNaN(value)) {
         return fallback;
       }
-      if (!options?.convertDecimal && (value).toString().indexOf('.') >= 0) {
+      if (!options?.convertDecimal && value.toString().indexOf('.') >= 0) {
         return fallback;
       }
     }
