@@ -30,4 +30,50 @@ describe('#ensureValidNumber', function() {
     );
     expect(ensureValidNumber(2, void 0, { convertDecimal: true })).toBe(2);
   });
+
+  it('Should parse negative numbers', function() {
+    expect(
+      ensureValidNumber(-2.22, void 0, {
+        convertDecimal: true,
+        allowNegative: true
+      })
+    ).toBe(-2);
+    expect(
+      ensureValidNumber(-2, void 0, {
+        convertDecimal: true,
+        allowNegative: true
+      })
+    ).toBe(-2);
+    expect(
+      ensureValidNumber('-2', void 0, {
+        convertDecimal: false,
+        allowNegative: true
+      })
+    ).toBe(-2);
+    expect(
+      ensureValidNumber(-2, void 0, {
+        convertDecimal: false,
+        allowNegative: true
+      })
+    ).toBe(-2);
+    expect(
+      ensureValidNumber('-2.22', void 0, {
+        convertDecimal: false,
+        allowNegative: true
+      })
+    ).toBe(void 0); // It's a decimal with decimal flag off
+    expect(
+      ensureValidNumber('-2.22', void 0, {
+        convertDecimal: true,
+        allowNegative: true
+      })
+    ).toBe(-2);
+
+    expect(
+      ensureValidNumber('-2', void 0, {
+        convertDecimal: true,
+        allowNegative: false
+      })
+    ).toBe(void 0); // Negative not allowed
+  });
 });
