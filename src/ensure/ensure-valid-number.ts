@@ -1,5 +1,5 @@
 /**
- * Takes any value and matches it agains a regex.
+ * Takes any value and matches it against a regex.
  * If is a number it returns it
  * If is a numeric string it returns it's numeric version
  * Otherwise returns the fallback that by default is void 0
