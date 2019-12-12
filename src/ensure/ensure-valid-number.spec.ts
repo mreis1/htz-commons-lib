@@ -16,8 +16,8 @@ describe('#ensureValidNumber', function() {
   });
 
   it('Should parse string of decimals', function() {
-    expect(
-      ensureValidNumber('2.1a', void 0, { convertDecimal: true })).toBe(void 0
+    expect(ensureValidNumber('2.1a', void 0, { convertDecimal: true })).toBe(
+      void 0
     );
     expect(ensureValidNumber('2.11', void 0, { convertDecimal: true })).toBe(2);
     expect(ensureValidNumber('2,11', void 0, { convertDecimal: true })).toBe(2);
@@ -25,7 +25,9 @@ describe('#ensureValidNumber', function() {
 
   it('Should parse numbers', function() {
     expect(ensureValidNumber(2.22, void 0, { convertDecimal: true })).toBe(2);
-    expect(ensureValidNumber(2.22, void 0, { convertDecimal: false })).toBe(void 0);
+    expect(ensureValidNumber(2.22, void 0, { convertDecimal: false })).toBe(
+      void 0
+    );
     expect(ensureValidNumber(2, void 0, { convertDecimal: true })).toBe(2);
   });
 });
