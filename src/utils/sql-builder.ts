@@ -39,19 +39,29 @@ export class SqlBuilder {
   }
 
   public and(value: string) {
-    this.conditions.push({
-      type: Type.QUERY,
-      operation: Operation.AND,
-      value
-    });
+    if (typeof value === 'string') {
+      value = value.trim();
+      if (value.length >= 1) {
+        this.conditions.push({
+          type: Type.QUERY,
+          operation: Operation.AND,
+          value
+        });
+      }
+    }
     return this;
   }
   public or(value: string) {
-    this.conditions.push({
-      type: Type.QUERY,
-      operation: Operation.OR,
-      value
-    });
+    if (typeof value === 'string') {
+      value = value.trim();
+      if (value.length >= 1) {
+        this.conditions.push({
+          type: Type.QUERY,
+          operation: Operation.OR,
+          value
+        });
+      }
+    }
     return this;
   }
 

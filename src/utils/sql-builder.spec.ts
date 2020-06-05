@@ -37,4 +37,10 @@ describe('sql-builder', () => {
     // toString method returns always a space at the begining and the end of the string
     expect(result).toBe(` WHERE  ( CLI_ID = 1 OR CLI_ID = 2) `);
   });
+  test('ignore empty condition', () => {
+    let b = new SqlBuilder();
+    b.and(' ')
+      .or('    ');
+    expect(b.toString({where: true})).toBe('');
+  });
 });
