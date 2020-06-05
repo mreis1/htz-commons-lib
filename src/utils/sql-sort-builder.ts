@@ -111,13 +111,13 @@ export class SqlSortBuilder {
       let _isString = typeof prop === 'string';
       if (_isString || _isArray) {
         let parts = _isArray ? prop : prop.split(':'); // Parse string of format: PROP:ORDER
-        const v: string = parts[0];
+        const o: string = parts[0];
         let order: SortOrder = SqlSortBuilder.ensureSortOrder(
           parts[1],
           SqlSortBuilder.ensureSortOrder(options?.order, this.defaultSortOrder)
         );
-        if (this.isValid(v).valid) {
-          sortBy.push(v);
+        if (this.isValid(o).valid) {
+          sortBy.push(o);
           sortByOrder.push(order);
         } else {
           if (
