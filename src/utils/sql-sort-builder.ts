@@ -41,7 +41,6 @@ export class SqlSortBuilder {
     }
   }
 
-
   /**
    * Given a array of accepted values: ['A', 'B', 'C']
    * if you convert `a1:ASC,b1:DESC,c1:ASC,d1:desc' with a matching table of ['a1','b1','c1']
@@ -56,7 +55,7 @@ export class SqlSortBuilder {
       throw new Error('Convert expects an array.');
     }
     let props = [];
-    (SqlSortBuilder.splitStr(str, [])).forEach(i => {
+    SqlSortBuilder.splitStr(str, []).forEach(i => {
       if (typeof i === 'string') {
         let parts = i.split(':');
         let targetI = arr.findIndex(arrV => arrV === parts[0]);
@@ -70,7 +69,6 @@ export class SqlSortBuilder {
     });
     return props;
   }
-
 
   /**
    * Updates the sorting
@@ -146,9 +144,7 @@ export class SqlSortBuilder {
   public toString(options: { order: boolean }) {
     let str = '';
     if (this.sortBy.length) {
-      str = this.sortBy
-        .map((v, i) => v + ' ' + this.sortByOrder[i])
-        .join(',');
+      str = this.sortBy.map((v, i) => v + ' ' + this.sortByOrder[i]).join(',');
     }
     if (options?.order && str !== '') {
       str = 'ORDER BY ' + ' ' + str;
@@ -163,5 +159,4 @@ export class SqlSortBuilder {
     }
     return output;
   }
-
 }

@@ -39,8 +39,7 @@ describe('sql-builder', () => {
   });
   test('ignore empty condition', () => {
     let b = new SqlBuilder();
-    b.and(' ')
-      .or('    ');
-    expect(b.toString({where: true})).toBe('');
+    b.and(' ').or('    ');
+    expect(b.toString({ where: true })).toBe('');
   });
 });
