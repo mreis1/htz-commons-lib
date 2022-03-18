@@ -10,22 +10,21 @@ describe('SliceP', function () {
   test('#Buffer', () => {
     let o;
     try {
-      o = sliceP(Buffer.from([1, 2, 3, 4]), 1, 2).toString('hex');
+      o = sliceP(Buffer.from([1, 2, 3, 4]), 1, 2);
     } catch (err) {
       // ...
     }
     expect(o instanceof Buffer).toBeTruthy();
-    expect(o).toBe('0203');
+    expect(o.toString('hex')).toBe('0203');
   });
 
   test('#String', () => {
     let o;
     try {
-      o = sliceP(Buffer.from([1, 2, 3, 4]), 1, 2).toString('hex');
+      o = sliceP('abc', 1, 2);
     } catch (err) {
       // ...
     }
-    expect(o instanceof Buffer).toBeTruthy();
-    expect(o).toBe('0203');
+    expect(o).toBe('bc');
   });
 });
