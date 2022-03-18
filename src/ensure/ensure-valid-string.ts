@@ -5,7 +5,7 @@ interface IEnsureValidStringOpts {
   /**
    * Will run character replacement before checking min-length
    */
-  replace?: Array<{ exp: RegExp | string; value: string }>;
+  replace?: { exp: RegExp | string; value: string }[];
   defaultValue?: any;
   minLength?: number;
   accepts?: string[];
