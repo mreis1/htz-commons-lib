@@ -3,5 +3,5 @@ export enum PARITY {
   even = 'even',
   mark = 'mark',
   odd = 'odd',
-  space = 'space'
+  space = 'space',
 }

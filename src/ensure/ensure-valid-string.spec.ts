@@ -6,8 +6,8 @@ describe('EnsureValidString', () => {
       str = ensureValidString(str, {
         replace: [
           { exp: new RegExp('(\\s|-|_)+', 'gi'), value: '' },
-          { exp: new RegExp('([\\d+]{3})+', 'gi'), value: '' }
-        ]
+          { exp: new RegExp('([\\d+]{3})+', 'gi'), value: '' },
+        ],
       });
     }).not.toThrow();
   });
@@ -15,7 +15,7 @@ describe('EnsureValidString', () => {
     let str = null;
     str = ensureValidString(str, {
       accepts: ['1', '2'],
-      defaultValue: '1'
+      defaultValue: '1',
     });
     expect(str).toBe('1');
   });
@@ -23,14 +23,14 @@ describe('EnsureValidString', () => {
     let str = '1';
     str = ensureValidString(str, {
       accepts: ['1', '2'],
-      defaultValue: '2'
+      defaultValue: '2',
     });
     expect(str).toBe('1');
   });
   test('Should replace all characters matching a given regexp', () => {
     expect(
       ensureValidString('FR 213FOO-_BAR', {
-        replace: [{ exp: new RegExp('([\\d+]{3}|\\s|-|_)+', 'gi'), value: '' }]
+        replace: [{ exp: new RegExp('([\\d+]{3}|\\s|-|_)+', 'gi'), value: '' }],
       })
     ).toBe('FRFOOBAR');
   });
@@ -39,22 +39,22 @@ describe('EnsureValidString', () => {
       ensureValidString('FR 213FOO-BAR12', {
         replace: [
           { exp: new RegExp('(\\s|-|_)+', 'gi'), value: '' },
-          { exp: new RegExp('([\\d+]{3})+', 'gi'), value: '' }
-        ]
+          { exp: new RegExp('([\\d+]{3})+', 'gi'), value: '' },
+        ],
       })
     ).toBe('FRFOOBAR12');
   });
   test('Should uppercase strings', () => {
     expect(
       ensureValidString('fr', {
-        transform: 'upperCase'
+        transform: 'upperCase',
       })
     ).toBe('FR');
   });
   test('Should lower case', () => {
     expect(
       ensureValidString('FR', {
-        transform: 'lowerCase'
+        transform: 'lowerCase',
       })
     ).toBe('fr');
   });

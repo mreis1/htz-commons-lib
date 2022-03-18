@@ -1,11 +1,13 @@
 // Conditional Types to the rescue:
 // https://stackoverflow.com/a/54166010/1084568
 export type ArgType = any[] | string | Buffer;
-export type ResType<T extends ArgType> =
-  T extends any[] ? any[] :
-    T extends string ? string :
-      T extends Buffer ? Buffer :
-        never;
+export type ResType<T extends ArgType> = T extends any[]
+  ? any[]
+  : T extends string
+  ? string
+  : T extends Buffer
+  ? Buffer
+  : never;
 
 /**
  * Returns X characters starting at a given position
@@ -18,6 +20,10 @@ export type ResType<T extends ArgType> =
  * @param start         The start index
  * @param howMany       The number of characters
  */
-export function sliceP<T extends ArgType>(value: T, start: number, howMany: number): ResType<T> {
+export function sliceP<T extends ArgType>(
+  value: T,
+  start: number,
+  howMany: number
+): ResType<T> {
   return value.slice(start, start + howMany) as any;
 }

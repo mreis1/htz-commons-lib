@@ -1,6 +1,6 @@
 {
   "name": "htz-commons-lib",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "A suite of different libraries that allow you to ensure values of certain types",
   "main": "index.js",
   "types": "index.d.ts",
@@ -8,7 +8,7 @@
     "build": "rimraf ./dist && tsc --d --project tsconfig.json",
     "test": "jest --config jestconfig.json",
     "test:xpec": "jest --config jestconfig-xpec.json",
-    "format": "prettier --write \"src/**/*.ts\" \"src/**/*.js\" --config=.prettierrc",
+    "format": "prettier --write \"src/**/*.ts\" --config=.prettierrc",
     "lint": "tslint -p tsconfig.json",
     "prepare": "tsc --d --project tsconfig-config.json",
     "prepublishOnly": "npm test && npm run lint",

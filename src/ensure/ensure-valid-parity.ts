@@ -5,7 +5,7 @@ const accepted: PARITY[] = [
   PARITY.even,
   PARITY.mark,
   PARITY.odd,
-  PARITY.space
+  PARITY.space,
 ];
 
 export function ensureValidParity(v: PARITY, defaultValue) {

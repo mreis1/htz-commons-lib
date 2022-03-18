@@ -16,14 +16,14 @@ export function ensureArrayOfNumbers(
   options = options || { decimals: false };
   if (Array.isArray(data)) {
     return data
-      .map(i => {
+      .map((i) => {
         if (options.decimals) {
           return ensureValidDecimal(i);
         } else {
           return ensureValidNumber(i);
         }
       })
-      .filter(i => i !== void 0);
+      .filter((i) => i !== void 0);
   } else {
     return defaultValue;
   }

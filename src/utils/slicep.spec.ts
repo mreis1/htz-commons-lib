@@ -1,11 +1,9 @@
 import { sliceP } from './slicep';
 
-describe('SliceP', function() {
+describe('SliceP', function () {
   test('#Array', () => {
     const v = sliceP([1, 2, 3, 4], 2, 2);
-    expect(JSON.stringify(v)).toBe(
-      JSON.stringify([3, 4])
-    );
+    expect(JSON.stringify(v)).toBe(JSON.stringify([3, 4]));
     expect(v instanceof Array).toBeTruthy();
   });
 
@@ -18,7 +16,7 @@ describe('SliceP', function() {
     }
     expect(o instanceof Buffer).toBeTruthy();
     expect(o).toBe('0203');
-  })
+  });
 
   test('#String', () => {
     let o;
@@ -29,6 +27,5 @@ describe('SliceP', function() {
     }
     expect(o instanceof Buffer).toBeTruthy();
     expect(o).toBe('0203');
-  })
-
+  });
 });

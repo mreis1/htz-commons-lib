@@ -30,7 +30,7 @@ export function ensureValidString(
       Array.isArray(options.replace) &&
       options.replace.length
     ) {
-      options.replace.forEach(item => {
+      options.replace.forEach((item) => {
         let b = str;
         str = str.replace(item.exp, item.value);
       });

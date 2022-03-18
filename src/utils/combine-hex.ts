@@ -4,7 +4,7 @@
  */
 export function combineHex(...args) {
   const arr = [];
-  args.forEach(value => {
+  args.forEach((value) => {
     if (value !== void 0 && value != null) {
       const isBuffer = Buffer.isBuffer(value);
       const value2 = isBuffer || Array.isArray(value) ? value : [value];

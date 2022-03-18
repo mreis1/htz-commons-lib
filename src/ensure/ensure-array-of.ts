@@ -7,7 +7,7 @@ import { ensureValidArray } from './ensure-valid-array';
 export function ensureArrayOf(value, validator: (value) => boolean) {
   value = ensureValidArray(value, []);
   if (value) {
-    value = value.filter(v => validator(v));
+    value = value.filter((v) => validator(v));
   }
   return value;
 }

@@ -1,6 +1,6 @@
 export enum SortOrder {
   ASC = 'ASC',
-  DESC = 'DESC'
+  DESC = 'DESC',
 }
 
 export interface IOptions {
@@ -55,10 +55,10 @@ export class SqlSortBuilder {
       throw new Error('Convert expects an array.');
     }
     let props = [];
-    SqlSortBuilder.splitStr(str, []).forEach(i => {
+    SqlSortBuilder.splitStr(str, []).forEach((i) => {
       if (typeof i === 'string') {
         let parts = i.split(':');
-        let targetI = arr.findIndex(arrV => arrV === parts[0]);
+        let targetI = arr.findIndex((arrV) => arrV === parts[0]);
         let convertedValue = this.acceptedValues[targetI];
         if (convertedValue) {
           props.push([convertedValue, parts[1]]);
