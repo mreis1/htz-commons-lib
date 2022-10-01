@@ -27,4 +27,13 @@ describe('SliceP', function () {
     }
     expect(o).toBe('bc');
   });
+  test('#Return undefined when value is not sliceable', () => {
+    let o;
+    try {
+      o = sliceP(void 0, 1, 2);
+    } catch (err) {
+      // ...
+    }
+    expect(o).toBeUndefined();
+  });
 });

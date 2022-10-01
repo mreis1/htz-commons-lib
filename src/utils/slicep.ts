@@ -25,5 +25,5 @@ export function sliceP<T extends ArgType>(
   start: number,
   howMany: number
 ): ResType<T> {
-  return value.slice(start, start + howMany) as any;
+  return value?.slice?.(start, start + howMany) as any;
 }
