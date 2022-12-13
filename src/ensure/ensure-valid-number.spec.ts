@@ -76,4 +76,12 @@ describe('#ensureValidNumber', function () {
       })
     ).toBe(void 0); // Negative not allowed
   });
+
+  it('Should preserve nulls if `allowNull=true`', () => {
+    expect(
+      ensureValidNumber(null, -1, {
+        allowNull: true
+      })
+    ).toBe(null); // Negative not allowed
+  })
 });

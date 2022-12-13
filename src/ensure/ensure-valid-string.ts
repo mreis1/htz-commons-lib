@@ -6,10 +6,48 @@ interface IEnsureValidStringOpts {
    * Will run character replacement before checking min-length
    */
   replace?: { exp: RegExp | string; value: string }[];
+  /**
+   * @default void 0
+   */
   defaultValue?: any;
+  /**
+   * @default 1
+   */
   minLength?: number;
+  /**
+   * When defined, the srcValue must exist in "accepts" array
+   *
+   * Ex:
+   *    ensureValidString("c", { ..., "accepts": ["a","b"] }) => void 0
+   *    ensureValidString("b", { ..., "accepts": ["a","b"] }) => "b"
+   */
   accepts?: string[];
   rejects?: string[];
+  /**
+   * Trims the srcValue
+   * @default false
+   */
+  trim?: boolean;
+  /**
+   * @default none
+   */
+  maxLength?: number;
+  /**
+   * The expected action if maxLength is not respected
+   * - Throw        Throws MAX_LENGTH_KO
+   * - UseDefault   Uses the defaultValue which is void 0 by default
+   * - Slices
+   *
+   * @default 'useDefault'
+   */
+  onMaxLengthKo?: 'throw' | 'useDefault' | 'slice';
+  /**
+   * Will return the value
+   *
+   * @default false
+   */
+  allowNull?: boolean;
+
   // Either we should or not transform the string before comparing it with the accepted values
   transform?: 'none' | 'upperCase' | 'lowerCase';
 }
@@ -18,50 +56,89 @@ export function ensureValidString(
   str: string,
   defaultValueOrOptions?: IEnsureValidStringOpts | string
 ) {
-  let defaultValue;
-  let minLength;
   let options: IEnsureValidStringOpts;
   options = isObject(defaultValueOrOptions)
     ? (defaultValueOrOptions as IEnsureValidStringOpts)
-    : null;
-  if (options) {
-    if (
-      typeof str === 'string' &&
-      Array.isArray(options.replace) &&
-      options.replace.length
-    ) {
-      options.replace.forEach((item) => {
-        let b = str;
-        str = str.replace(item.exp, item.value);
-      });
-    }
-    minLength = ensureValidNumber(options.minLength, 1);
-    defaultValue = options.defaultValue;
-  } else {
-    minLength = 1;
-    defaultValue = defaultValueOrOptions;
+    : {};
+
+  let {
+    minLength,
+    defaultValue,
+    maxLength,
+    onMaxLengthKo,
+    trim,
+    allowNull,
+    replace,
+    transform,
+    rejects,
+    accepts
+  } = options;
+
+  allowNull = typeof allowNull === 'boolean' ? allowNull : false;
+  trim = typeof trim === 'boolean' ? trim : false;
+  minLength = typeof minLength === 'number' && !isNaN(minLength) && minLength >= 0 ? minLength : 1;
+  maxLength = typeof maxLength === 'number' && !isNaN(maxLength) ? maxLength : Infinity;
+  const strType = typeof str;
+
+  if (
+    strType === 'string' &&
+    Array.isArray(replace) &&
+    replace.length
+  ) {
+    replace.forEach((item) => {
+      str = str.replace(item.exp, item.value);
+    });
   }
-  if (typeof str === 'string' && str.length >= minLength) {
-    if (options) {
-      if (options.transform) {
-        if (options.transform === 'lowerCase') {
-          str = str.toLowerCase();
-        } else if (options.transform === 'upperCase') {
-          str = str.toUpperCase();
-        } else {
-          str = str.toLowerCase();
-        }
+
+  if (strType === 'string' && trim === true) {
+    str = str.trim();
+  }
+
+  if (strType === 'string' && str.length >= minLength) {
+    if (transform) {
+      if (transform === 'lowerCase') {
+        str = str.toLowerCase();
+      } else if (transform === 'upperCase') {
+        str = str.toUpperCase();
+      } else {
+        str = str.toLowerCase();
       }
-      if (options.accepts) {
-        if (options.accepts.indexOf(str) >= 0) {
-          return str;
+    }
+
+    if (Array.isArray(accepts) && accepts.length) {
+      if (accepts.indexOf(str) >= 0) {
+        return str;
+      } else {
+        return defaultValue;
+      }
+    }
+
+    if (Array.isArray(rejects) && rejects.length) {
+      if (rejects.indexOf(str) >= 0) {
+        return defaultValue;
+      } else {
+        return str;
+      }
+    }
+
+    if (maxLength > 0) {
+      if (str.length > maxLength) {
+        if (onMaxLengthKo === 'throw') {
+          throw new Error('MAX_LENGTH_KO');
+        } else if (onMaxLengthKo === 'slice') {
+          str = str.slice(0, maxLength);
         } else {
-          return defaultValue;
+          // 'useDefault'
+          str = defaultValue; // Warning <-- Value might be undefined after this statement.
         }
       }
     }
+
     return str;
   } else {
+    if (allowNull) {
+      return null;
+    }
     return defaultValue;
   }
 }

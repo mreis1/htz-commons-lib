@@ -1,3 +1,4 @@
+export interface EnsureNumberOptions { convertDecimal?: boolean; allowNegative?: boolean; allowNull?: boolean; }
 /**
  * Takes a string value or a number and matches it against a regex.
  * It converts the value to a integer.
@@ -8,19 +9,20 @@
  * @param options
  * @param options.convertDecimal  {boolean} (false)   Either a decimal string should be converted to integer (Example: '11.11' => 11)
  * @param options.allowNegative   {boolean} (false)   Either we should consider negative values or not during parsing
+ * @param options.allowNull       {boolean} (false)   When true, if input value has null type, then null is returned.
  * @returns {any}
  */
 export function ensureValidNumber(
   value: any,
   fallback?,
-  options?: { convertDecimal?: boolean; allowNegative?: boolean }
+  options?: EnsureNumberOptions
 ) {
   options = options || ({} as any);
   if (value !== void 0 && value != null) {
     let t = typeof value;
     if (t === 'string') {
       value = value.trim();
-      let isValidString = false;
+      let isValidString: boolean;
       if (options.convertDecimal) {
         /**
          * 11 = true
@@ -71,6 +73,9 @@ export function ensureValidNumber(
       return parsed;
     }
   } else {
+    if (options.allowNull && value === null) {
+      return value;
+    }
     return fallback;
   }
 }

@@ -1,6 +1,7 @@
 import { ensureValidArray } from './ensure-valid-array';
 
 /**
+ * Ensures that an array is returned containing the elements based on your filter condition.
  * @param value
  * @param validator
  */

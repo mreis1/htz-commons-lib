@@ -1,19 +1,40 @@
+export interface EnsureDecimalOptions {
+  /**
+   * When true, converts strings of numeric values where the decimal is represented with a comma (ex: "1,1" -> 1.11)
+   * @default: true
+   */
+  replaceComma?: boolean;
+  /**
+   * Allows negative value
+   * @default: true
+   */
+  allowNegative?: boolean;
+  /**
+   * Allows null value
+   * @default false
+   */
+  allowNull?: boolean;
+}
 /**
- * Ensures that we are dealing with a valid number
+ * Ensures that we are dealing with a valid number decimal or integer.
  * @param value
- * @param defaultValue
+ * @param defaultValue    (default = void 0)
  * @param options
  */
 export function ensureValidDecimal(
   value: any,
   defaultValue?,
-  options?: { replaceComma?: boolean }
+  options?: EnsureDecimalOptions
 ) {
   const t = typeof value;
   options = options || { replaceComma: true };
   if (typeof options.replaceComma !== 'boolean') {
     options.replaceComma = true;
   }
+  if (typeof options.allowNegative !== 'boolean') {
+    options.allowNegative = true;
+  }
+  let output: number;
   if (t === 'string') {
     try {
       value = value.replace(/,/g, '.');
@@ -26,14 +47,17 @@ export function ensureValidDecimal(
        * while JSON.parse("123123.123a")
        * Uncaught SyntaxError: Unexpected token a in JSON at position 10
        */
-      value = JSON.parse(value);
-      return value;
+      output = JSON.parse(value);
     } catch (err) {
-      return defaultValue;
+      return defaultValue; // return defaultValue immediately
     }
   } else if (t === 'number' && !isNaN(value)) {
-    return value;
+    output = value;
   } else {
+    return defaultValue; // return defaultValue immediately
+  }
+  if (!options.allowNegative && output < 0) {
     return defaultValue;
   }
+  return output;
 }
