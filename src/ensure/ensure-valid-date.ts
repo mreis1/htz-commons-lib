@@ -76,7 +76,10 @@ export interface EnsureValidDateOpts {
    */
   allowNull?: boolean;
 }
-export type EnsureValidDateOptsSimple = Omit<EnsureValidDateOpts, 'defaultValue' | 'inputFormat'>;
+export type EnsureValidDateOptsSimple = Omit<
+  EnsureValidDateOpts,
+  'defaultValue' | 'inputFormat'
+>;
 
 const DEFAULTS = {
   allowNull: false,

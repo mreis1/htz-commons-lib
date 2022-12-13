@@ -1,4 +1,7 @@
-import { EnsureValidNumberOptions, ensureValidNumber } from './ensure-valid-number';
+import {
+  EnsureValidNumberOptions,
+  ensureValidNumber,
+} from './ensure-valid-number';
 import {
   EnsureDecimalOptions,
   ensureValidDecimal,
