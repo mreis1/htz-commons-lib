@@ -92,7 +92,10 @@ const DEFAULTS = {
  * Make sure to provide the appropriate format.
  *
  */
-export function ensureValidDate(data: any, options?: EnsureValidDateOpts): Moment;
+export function ensureValidDate(
+  data: any,
+  options?: EnsureValidDateOpts
+): Moment;
 export function ensureValidDate(
   data: any,
   defaultValue?,
