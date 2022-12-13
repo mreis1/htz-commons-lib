@@ -92,13 +92,13 @@ const DEFAULTS = {
  * Make sure to provide the appropriate format.
  *
  */
-export function ensureValidDate(data: any, options?: EnsureValidDateOpts);
+export function ensureValidDate(data: any, options?: EnsureValidDateOpts): Moment;
 export function ensureValidDate(
   data: any,
   defaultValue?,
   inputFormat? /*= 'YYYY-MM-DD'*/,
   simpleOpts?: EnsureValidDateOptsSimple
-);
+): Moment;
 export function ensureValidDate(date: any, ...args): Moment {
   const nullOrUndefinedOrEmpty = isNullOrUndefinedOrEmptyStr(date);
   let defaultValue: any;
