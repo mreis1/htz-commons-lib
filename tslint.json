@@ -11,6 +11,7 @@
       "object-literal-sort-keys": false,
       "no-console": false,
       "no-object-literal-type-assertion": false,
+      "no-angle-bracket-type-assertion": false,
       "ordered-imports": [false]
    }
 }
