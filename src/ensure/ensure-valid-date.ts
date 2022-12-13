@@ -50,7 +50,7 @@ export function unregisterRegExp(f: string) {
   }
 }
 export type OnInvalidStringFormat = 'ignore' | 'defaultValue' | 'throw';
-export interface Options {
+export interface EnsureValidDateOpts {
   /**
    *
    * - ignore:
@@ -76,7 +76,7 @@ export interface Options {
    */
   allowNull?: boolean;
 }
-export type OptionsSimple = Omit<Options, 'defaultValue' | 'inputFormat'>;
+export type EnsureValidDateOptsSimple = Omit<EnsureValidDateOpts, 'defaultValue' | 'inputFormat'>;
 
 const DEFAULTS = {
   allowNull: false,
@@ -89,12 +89,12 @@ const DEFAULTS = {
  * Make sure to provide the appropriate format.
  *
  */
-export function ensureValidDate(data: any, options?: Options);
+export function ensureValidDate(data: any, options?: EnsureValidDateOpts);
 export function ensureValidDate(
   data: any,
   defaultValue?,
   inputFormat? /*= 'YYYY-MM-DD'*/,
-  simpleOpts?: OptionsSimple
+  simpleOpts?: EnsureValidDateOptsSimple
 );
 export function ensureValidDate(date: any, ...args): Moment {
   const nullOrUndefinedOrEmpty = isNullOrUndefinedOrEmptyStr(date);
@@ -106,7 +106,7 @@ export function ensureValidDate(date: any, ...args): Moment {
 
   // ----
   let inputFormat: string;
-  let simpleOpts: OptionsSimple =
+  let simpleOpts: EnsureValidDateOptsSimple =
     args[2] && typeof args[2] === 'object' ? args[2] : void 0;
   let onInvalidStringFormat: OnInvalidStringFormat;
   let allowNull: boolean;
@@ -127,7 +127,7 @@ export function ensureValidDate(date: any, ...args): Moment {
     !isDateDefaultValue &&
     args.length === 1
   ) {
-    let options = args[0] as Options;
+    let options = args[0] as EnsureValidDateOpts;
     onInvalidStringFormat = options.onInvalidStringFormat;
     allowNull =
       typeof options.allowNull === 'boolean'

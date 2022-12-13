@@ -1,7 +1,7 @@
 import { isObject } from '../utils';
 import { ensureValidNumber } from './ensure-valid-number';
 
-interface IEnsureValidStringOpts {
+interface EnsureValidStringOpts {
   /**
    * Will run character replacement before checking min-length
    */
@@ -54,11 +54,11 @@ interface IEnsureValidStringOpts {
 
 export function ensureValidString(
   str: string,
-  defaultValueOrOptions?: IEnsureValidStringOpts | string
+  defaultValueOrOptions?: EnsureValidStringOpts | string
 ) {
-  let options: IEnsureValidStringOpts;
+  let options: EnsureValidStringOpts;
   options = isObject(defaultValueOrOptions)
-    ? (defaultValueOrOptions as IEnsureValidStringOpts)
+    ? (defaultValueOrOptions as EnsureValidStringOpts)
     : {};
 
   let {

@@ -1,4 +1,4 @@
-import { EnsureNumberOptions, ensureValidNumber } from './ensure-valid-number';
+import { EnsureValidNumberOptions, ensureValidNumber } from './ensure-valid-number';
 import {
   EnsureDecimalOptions,
   ensureValidDecimal,
@@ -32,7 +32,7 @@ export type Options =
     }
   | {
       decimals: false;
-      intOptions?: EnsureNumberOptions;
+      intOptions?: EnsureValidNumberOptions;
     };
 
 /**

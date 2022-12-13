@@ -1,4 +1,4 @@
-export interface EnsureNumberOptions {
+export interface EnsureValidNumberOptions {
   convertDecimal?: boolean;
   allowNegative?: boolean;
   allowNull?: boolean;
@@ -19,7 +19,7 @@ export interface EnsureNumberOptions {
 export function ensureValidNumber(
   value: any,
   fallback?,
-  options?: EnsureNumberOptions
+  options?: EnsureValidNumberOptions
 ) {
   options = options || ({} as any);
   if (value !== void 0 && value != null) {

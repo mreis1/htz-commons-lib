@@ -1,4 +1,10 @@
-export function ensureValidEmail(email) {
+export interface EnsureValidEmailOpts {
+  allowNull?: boolean;
+}
+export function ensureValidEmail(email, opts?: EnsureValidEmailOpts) {
+  if (email === null && opts?.allowNull) {
+    return null;
+  }
   if (!email || !(typeof email === 'string')) {
     return void 0;
   }

@@ -1,6 +1,6 @@
 import { tryJSONParse } from '../utils/try-json-parse';
 
-export interface Options {
+export interface EnsureBooleanOpts {
   allowNull?: boolean;
 }
 /**
@@ -15,7 +15,7 @@ export interface Options {
  * @param opts
  * @param opts.allowNull    (default = false) When true, null value is preserved.
  */
-export function ensureBoolean(data, defaultValue?, opts?: Options) {
+export function ensureBoolean(data, defaultValue?, opts?: EnsureBooleanOpts) {
   if (opts?.allowNull && data === null) {
     return null;
   }
