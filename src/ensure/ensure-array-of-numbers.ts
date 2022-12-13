@@ -51,9 +51,11 @@ export function ensureArrayOfNumbers(
   defaultValue?: any,
   options?: Options
 ) {
-  options = options || {} as any;
-  options.decimals = typeof options.decimals === 'boolean' ? options.decimals : false;
-  const decimalOptions = options.decimals === true && options.decimalOpts || {};
+  options = options || ({} as any);
+  options.decimals =
+    typeof options.decimals === 'boolean' ? options.decimals : false;
+  const decimalOptions =
+    (options.decimals === true && options.decimalOpts) || {};
   if (typeof decimalOptions.allowNegative !== 'boolean') {
     decimalOptions.allowNegative = false;
   }

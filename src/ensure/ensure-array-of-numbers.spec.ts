@@ -18,18 +18,16 @@ describe('#ensureArrayOfNumbers', () => {
     expect(ensureArrayOfNumbers(null, [])).toHaveLength(0);
   });
 
-  it('Should respect', () => {
-
-  });
+  it('Should respect', () => {});
 
   describe('#general', () => {
     describe('with default configuration', () => {
       it('default must be `decimals: false`', () => {
         // which means discard decimal values
         expect(ensureArrayOfNumbers([1, 2.2, -1])).toHaveLength(1);
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('#decimals', () => {
     describe('with default configuration', () => {
@@ -38,27 +36,27 @@ describe('#ensureArrayOfNumbers', () => {
           decimals: true,
         });
         expect(d).toHaveLength(2);
-        expect(JSON.stringify(d)).toBe(JSON.stringify([1,2.2]));
-      })
+        expect(JSON.stringify(d)).toBe(JSON.stringify([1, 2.2]));
+      });
       it('Should replace comma in numeric strings', () => {
         const d = ensureArrayOfNumbers(['2,23'], [], {
           decimals: true,
         });
         expect(JSON.stringify(d)).toBe(JSON.stringify([2.23]));
-      })
+      });
 
       it('Should replace comma in numeric strings', () => {
         const d = ensureArrayOfNumbers(['2,23'], [], {
           decimals: true,
         });
         expect(JSON.stringify(d)).toBe(JSON.stringify([2.23]));
-      })
+      });
       it('Should discard negative numbers', () => {
-        const d = ensureArrayOfNumbers(['-2,23',-1], [], {
+        const d = ensureArrayOfNumbers(['-2,23', -1], [], {
           decimals: true,
         });
         expect(d).toHaveLength(0);
-      })
-    })
-  })
+      });
+    });
+  });
 });

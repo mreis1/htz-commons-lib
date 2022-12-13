@@ -80,8 +80,8 @@ describe('#ensureValidNumber', function () {
   it('Should preserve nulls if `allowNull=true`', () => {
     expect(
       ensureValidNumber(null, -1, {
-        allowNull: true
+        allowNull: true,
       })
     ).toBe(null); // Negative not allowed
-  })
+  });
 });

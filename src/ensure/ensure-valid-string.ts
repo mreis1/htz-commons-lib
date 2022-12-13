@@ -71,20 +71,20 @@ export function ensureValidString(
     replace,
     transform,
     rejects,
-    accepts
+    accepts,
   } = options;
 
   allowNull = typeof allowNull === 'boolean' ? allowNull : false;
   trim = typeof trim === 'boolean' ? trim : false;
-  minLength = typeof minLength === 'number' && !isNaN(minLength) && minLength >= 0 ? minLength : 1;
-  maxLength = typeof maxLength === 'number' && !isNaN(maxLength) ? maxLength : Infinity;
+  minLength =
+    typeof minLength === 'number' && !isNaN(minLength) && minLength >= 0
+      ? minLength
+      : 1;
+  maxLength =
+    typeof maxLength === 'number' && !isNaN(maxLength) ? maxLength : Infinity;
   const strType = typeof str;
 
-  if (
-    strType === 'string' &&
-    Array.isArray(replace) &&
-    replace.length
-  ) {
+  if (strType === 'string' && Array.isArray(replace) && replace.length) {
     replace.forEach((item) => {
       str = str.replace(item.exp, item.value);
     });

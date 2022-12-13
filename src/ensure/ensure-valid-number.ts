@@ -1,4 +1,8 @@
-export interface EnsureNumberOptions { convertDecimal?: boolean; allowNegative?: boolean; allowNull?: boolean; }
+export interface EnsureNumberOptions {
+  convertDecimal?: boolean;
+  allowNegative?: boolean;
+  allowNull?: boolean;
+}
 /**
  * Takes a string value or a number and matches it against a regex.
  * It converts the value to a integer.

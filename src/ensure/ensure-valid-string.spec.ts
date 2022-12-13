@@ -21,29 +21,27 @@ describe('EnsureValidString', () => {
 
   describe('#minLength', () => {
     it('should be length', () => {
-      expect(
-        ensureValidString('')
-      ).toBe(void 0);
+      expect(ensureValidString('')).toBe(void 0);
     });
     it('should accept minLength: 0', () => {
       expect(
         ensureValidString('', {
-          minLength: 0
+          minLength: 0,
         })
       ).toBe('');
       expect(
         ensureValidString('', {
-          defaultValue: 'XX'
+          defaultValue: 'XX',
         })
       ).toBe('XX');
 
       expect(
         ensureValidString(1 as any, {
-          minLength: 0
+          minLength: 0,
         })
       ).toBe(void 0);
-    })
-  })
+    });
+  });
 
   describe('#accepts', () => {
     it('should return the value because it exists in accepts', () => {

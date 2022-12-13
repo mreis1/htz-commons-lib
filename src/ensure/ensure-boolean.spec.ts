@@ -9,7 +9,9 @@ test('ensureBoolean', () => {
   expect(ensureBoolean(8)).toBe(undefined); // Here the valid value is used.
   expect(ensureBoolean('8')).toBe(undefined); // Here the valid value is used.
   expect(ensureBoolean(null)).toBe(undefined); // Here the valid value is used.
-  expect(ensureBoolean(null, void 0, {
-    allowNull: true
-  })).toBe(null); // Here the valid value is used.
+  expect(
+    ensureBoolean(null, void 0, {
+      allowNull: true,
+    })
+  ).toBe(null); // Here the valid value is used.
 });
