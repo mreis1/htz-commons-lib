@@ -27,16 +27,25 @@ export interface EnsureDecimalOptions2 extends EnsureDecimalOptions {
    */
   allowNull?: boolean;
 }
-
+export interface EnsureArrayOfNumberCommonOpts {
+  /**
+   * @default false
+   */
+  allowNull?: boolean;
+  /**
+   * @default: false
+   */
+  unique?: boolean;
+}
 export type Options =
-  | {
+  | ({
       decimals: true;
       decimalOpts?: EnsureDecimalOptions2;
-    }
-  | {
+    } & EnsureArrayOfNumberCommonOpts)
+  | ({
       decimals: false;
       intOptions?: EnsureValidNumberOptions;
-    };
+    } & EnsureArrayOfNumberCommonOpts);
 
 /**
  * Takes an array and returns numeric entries.
@@ -62,16 +71,30 @@ export function ensureArrayOfNumbers(
   if (typeof decimalOptions.allowNegative !== 'boolean') {
     decimalOptions.allowNegative = false;
   }
+  const allowNull = options?.allowNull === true;
+  const unique = options?.unique === true;
+  let output = [];
   if (Array.isArray(data)) {
-    return data
-      .map((i) => {
-        if (options.decimals === true) {
-          return ensureValidDecimal(i, void 0, decimalOptions);
-        } else {
-          return ensureValidNumber(i, void 0, options.intOptions);
+    data.forEach((i) => {
+      let res;
+      if (allowNull && i === null) {
+        if (!unique || (unique && output.indexOf(i) === -1)) {
+          output.push(i);
         }
-      })
-      .filter((i) => i !== void 0);
+      } else {
+        if (options.decimals === true) {
+          res = ensureValidDecimal(i, void 0, decimalOptions);
+        } else {
+          res = ensureValidNumber(i, void 0, options.intOptions);
+        }
+        if (res !== void 0) {
+          if (!unique || (unique && output.indexOf(res) === -1)) {
+            output.push(res);
+          }
+        }
+      }
+    });
+    return output;
   } else {
     return defaultValue;
   }

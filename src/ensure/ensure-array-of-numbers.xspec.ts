@@ -1,7 +1,7 @@
 import { ensureArrayOfNumbers } from './ensure-array-of-numbers';
 
 describe('#ensureArrayOfNumbers', () => {
-  test('Multiple scenarios', () => {
+  /*test('Multiple scenarios', () => {
     expect(ensureArrayOfNumbers(['1', 2, 3, 'a'])).toHaveLength(3);
     expect(ensureArrayOfNumbers(['1', 2, 3, 'a'])[0]).toBe(1);
     expect(
@@ -58,5 +58,59 @@ describe('#ensureArrayOfNumbers', () => {
         expect(d).toHaveLength(0);
       });
     });
-  });
+  });*/
+
+  describe('#commons', () => {
+    describe('#unique', () => {
+      it('Test#1', () => {
+        let d = ensureArrayOfNumbers(['-2,23', -1, 2.2, '2,2', null], [], {
+          decimals: true,
+          unique: true
+        });
+        expect(d).toHaveLength(1);
+      })
+
+      it('Test#2', () => {
+        let d = ensureArrayOfNumbers(['-2,23', -1, 2.2, '2,2', null], [], {
+          decimals: true,
+          unique: true,
+          allowNull: true
+        });
+        expect(d).toHaveLength(2);
+      })
+
+      it('Test#3', () => {
+        let d = ensureArrayOfNumbers(['-2,23', -1, 2.2, '2,2', null], [], {
+          decimals: true,
+          unique: true,
+          allowNull: false
+        });
+        expect(d).toHaveLength(1);
+      })
+
+      it('Test#4', () => {
+        let d = ensureArrayOfNumbers(['-2,23', -1, 2.2, '2,2', null], [], {
+          decimals: true,
+          unique: true,
+          allowNull: false,
+          decimalOpts: {
+            allowNegative: true
+          }
+        });
+        expect(d).toHaveLength(3);
+      })
+
+      it('Test#5', () => {
+        let d = ensureArrayOfNumbers(['-2,23', -1, 2.2, '2,2', null], [], {
+          decimals: true,
+          unique: true,
+          allowNull: true,
+          decimalOpts: {
+            allowNegative: true
+          }
+        });
+        expect(d).toHaveLength(4);
+      })
+    })
+  })
 });
