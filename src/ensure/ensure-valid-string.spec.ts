@@ -21,9 +21,9 @@ describe('EnsureValidString', () => {
 
   describe('Basic call', () => {
     test('undefined + defaultValue', () => {
-      expect(ensureValidString(void 0, 'foo')).toBe('foo')
-    })
-  })
+      expect(ensureValidString(void 0, 'foo')).toBe('foo');
+    });
+  });
 
   describe('#minLength', () => {
     it('should be length', () => {

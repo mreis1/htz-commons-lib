@@ -59,9 +59,7 @@ export function ensureValidString(
   const t = typeof defaultValueOrOptions;
   const tIsObj = isObject(defaultValueOrOptions);
   let options: EnsureValidStringOpts;
-  options = tIsObj
-    ? (defaultValueOrOptions as EnsureValidStringOpts)
-    : {};
+  options = tIsObj ? (defaultValueOrOptions as EnsureValidStringOpts) : {};
 
   let {
     minLength,
@@ -87,7 +85,8 @@ export function ensureValidString(
       : 1;
   maxLength =
     typeof maxLength === 'number' && !isNaN(maxLength) ? maxLength : Infinity;
-  onMaxLengthKo = typeof onMaxLengthKo === 'string' ? onMaxLengthKo : 'useDefault';
+  onMaxLengthKo =
+    typeof onMaxLengthKo === 'string' ? onMaxLengthKo : 'useDefault';
   const strType = typeof str;
 
   if (strType === 'string' && Array.isArray(replace) && replace.length) {
