@@ -19,6 +19,12 @@ describe('EnsureValidString', () => {
     expect(str).toBe('1');
   });
 
+  describe('Basic call', () => {
+    test('undefined + defaultValue', () => {
+      expect(ensureValidString(void 0, 'foo')).toBe('foo')
+    })
+  })
+
   describe('#minLength', () => {
     it('should be length', () => {
       expect(ensureValidString('')).toBe(void 0);

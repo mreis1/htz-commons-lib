@@ -56,8 +56,10 @@ export function ensureValidString(
   str: string,
   defaultValueOrOptions?: EnsureValidStringOpts | string
 ) {
+  const t = typeof defaultValueOrOptions;
+  const tIsObj = isObject(defaultValueOrOptions);
   let options: EnsureValidStringOpts;
-  options = isObject(defaultValueOrOptions)
+  options = tIsObj
     ? (defaultValueOrOptions as EnsureValidStringOpts)
     : {};
 
@@ -74,6 +76,9 @@ export function ensureValidString(
     accepts,
   } = options;
 
+  if (!tIsObj) {
+    defaultValue = defaultValueOrOptions;
+  }
   allowNull = typeof allowNull === 'boolean' ? allowNull : false;
   trim = typeof trim === 'boolean' ? trim : false;
   minLength =
@@ -82,6 +87,7 @@ export function ensureValidString(
       : 1;
   maxLength =
     typeof maxLength === 'number' && !isNaN(maxLength) ? maxLength : Infinity;
+  onMaxLengthKo = typeof onMaxLengthKo === 'string' ? onMaxLengthKo : 'useDefault';
   const strType = typeof str;
 
   if (strType === 'string' && Array.isArray(replace) && replace.length) {
