@@ -110,12 +110,26 @@ describe('EnsureValidString', () => {
         })
       ).toBe('fr');
     });
+    test('> lowerCase', () => {
+      expect(
+        ensureValidString(void 0, {
+          transform: 'lowerCase',
+        })
+      ).toBe(void 0);
+    });
     test('> uppercase', () => {
       expect(
         ensureValidString('fr', {
           transform: 'upperCase',
         })
       ).toBe('FR');
+    });
+    test('> uppercase', () => {
+      expect(
+        ensureValidString(void 0, {
+          transform: 'upperCase',
+        })
+      ).toBe(void 0);
     });
   });
 
