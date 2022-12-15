@@ -51,7 +51,7 @@ export function ensureValidNumber(
     if (!options.allowNegative && value < 0) {
       return fallback;
     }
-    if (!options?.convertDecimal && value.toString().indexOf('.') >= 0) {
+    if (!options?.convertDecimal && value?.toString().indexOf('.') >= 0) {
       return fallback;
     }
 
