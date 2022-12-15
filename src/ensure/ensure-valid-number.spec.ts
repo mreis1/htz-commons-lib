@@ -1,6 +1,37 @@
 import { ensureValidNumber } from './ensure-valid-number';
 
 describe('#ensureValidNumber', function () {
+  describe('#convertDecimal', function () {
+    test('using comma', () => {
+      /*default*/
+      expect(ensureValidNumber('2,11', void 0, { })).toBe(void 0);
+      /*true*/
+      expect(ensureValidNumber('2,11', void 0, { convertDecimal: true })).toBe(2);
+      expect(ensureValidNumber('2,11,11', void 0, { convertDecimal: true })).toBe(void 0);
+      /*false*/
+      expect(ensureValidNumber('2,11', void 0, { convertDecimal: false })).toBe(void 0);
+      expect(ensureValidNumber('2,11,11', void 0, { convertDecimal: false })).toBe(void 0);
+    })
+    test('using dot', () => {
+      /*default*/
+      expect(ensureValidNumber('2.11', void 0, {  })).toBe(void 0);
+      expect(ensureValidNumber('2.11.11', void 0, {  })).toBe(void 0);
+      /*true*/
+      expect(ensureValidNumber('2.11', void 0, { convertDecimal: true })).toBe(2);
+      expect(ensureValidNumber('2.11.11', void 0, { convertDecimal: true })).toBe(void 0);
+      /*false*/
+      expect(ensureValidNumber('2.11', void 0, { convertDecimal: false })).toBe(void 0);
+      expect(ensureValidNumber('2.11.11', void 0, { convertDecimal: false })).toBe(void 0);
+    })
+    test('using numbers', () => {
+      /*default*/
+      expect(ensureValidNumber(2.11, void 0, { })).toBe(void 0);
+      /*true*/
+      expect(ensureValidNumber(2.11, void 0, { convertDecimal: true })).toBe(2);
+      /*false*/
+      expect(ensureValidNumber(2.11, void 0, { convertDecimal: false })).toBe(void 0);
+    })
+  });
   it('Should return void 0', function () {
     expect(ensureValidNumber('1.1a')).toBe(void 0);
     expect(ensureValidNumber('1.11')).toBe(void 0); // Without convertDecimal
