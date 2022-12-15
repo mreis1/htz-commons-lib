@@ -39,7 +39,7 @@ export function ensureValidNumber(
     let t = typeof value;
     if (t === 'string') {
       value = value.trim();
-      value = value.replace(',','.') // for backward compatibility - replace , with .
+      value = value.replace(',', '.'); // for backward compatibility - replace , with .
       value = tryJSONParse(value);
       if (value === void 0) {
         return fallback;

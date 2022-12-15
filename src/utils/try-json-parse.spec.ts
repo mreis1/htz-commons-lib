@@ -3,7 +3,7 @@ import { tryJSONParse } from './try-json-parse';
 describe('tryJSONParse', () => {
   it('null should be preserved', () => {
     expect(tryJSONParse(null)).toBe(null);
-  })
+  });
 
   it('numeric strings should be parsed', () => {
     expect(tryJSONParse('1.232e3')).toBe(1232);
@@ -16,8 +16,8 @@ describe('tryJSONParse', () => {
     expect(o).toHaveProperty('a');
     expect(o.a).toBe('b');
     const oInvalid = tryJSONParse('{a":"b"}');
-    expect(oInvalid).toBe(void 0)
+    expect(oInvalid).toBe(void 0);
     const oInvalid2 = tryJSONParse('{a":"b"}', 2);
-    expect(oInvalid2).toBe(2)
+    expect(oInvalid2).toBe(2);
   });
-})
+});
