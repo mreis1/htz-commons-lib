@@ -3,8 +3,8 @@ import { ensureValidNumber } from './ensure-valid-number';
 describe('#ensureValidNumber', function () {
   describe('#convertDecimal', function () {
     test('#Error', () => {
-      expect(ensureValidNumber('null')).toBe(void 0)
-    })
+      expect(ensureValidNumber('null')).toBe(void 0);
+    });
     test('using comma', () => {
       /*default*/
       expect(ensureValidNumber('2,11', void 0, {})).toBe(void 0);
