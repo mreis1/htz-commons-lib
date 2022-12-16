@@ -79,6 +79,19 @@ describe('ensure-valid-date.spec.ts', function () {
         registerRegExp('DD-MM-YYYY', ['^[\\d+]{2,2}-[\\d+]{2,2}-[\\d+]{4,4}$']);
 
         describe('#SimpleOptions', () => {
+          describe('Passing a moment as a default value', () => {
+            const d = ensureValidDate('', moment());
+            expect(moment.isMoment(d)).toBe(true)
+          })
+          describe('Passing a date as a default value', () => {
+            const d = ensureValidDate('', new Date());
+            expect(moment.isDate(d)).toBe(true)
+          })
+          describe('Passing a string as a default value', () => {
+            const d = ensureValidDate('', '2022-10-12');
+            expect(d).toBe('2022-10-12')
+          })
+
           it('should should register custom formats', function () {
             expect(() =>
               ensureValidDate('2022-31-12', void 0, 'DD-MM-YYYY', {

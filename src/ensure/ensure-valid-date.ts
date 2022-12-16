@@ -107,16 +107,16 @@ export function ensureValidDate(date: any, ...args): Moment {
   let defaultValue: any;
   const isMoment = moment.isMoment(date);
   const isDate = !isMoment && moment.isDate(date);
-  const isMomentDefaultValue = moment.isDate(args[0]);
+  const isMomentDefaultValue = moment.isMoment(args[0]);
   const isDateDefaultValue = !isMomentDefaultValue && moment.isDate(args[0]);
-
   // ----
   let inputFormat: string;
   let simpleOpts: EnsureValidDateOptsSimple =
+    args.length === 0 ||
+    (args.length === 1 && (isMomentDefaultValue || isDate)) ||
     args[2] && typeof args[2] === 'object' ? args[2] : void 0;
   let onInvalidStringFormat: OnInvalidStringFormat;
   let allowNull: boolean;
-
   inputFormat = typeof args[1] === 'string' ? args[1] : 'YYYY-MM-DD';
 
   if (simpleOpts) {
