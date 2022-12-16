@@ -114,7 +114,9 @@ export function ensureValidDate(date: any, ...args): Moment {
   let simpleOpts: EnsureValidDateOptsSimple =
     args.length === 0 ||
     (args.length === 1 && (isMomentDefaultValue || isDate)) ||
-    args[2] && typeof args[2] === 'object' ? args[2] : void 0;
+    (args[2] && typeof args[2] === 'object')
+      ? args[2]
+      : void 0;
   let onInvalidStringFormat: OnInvalidStringFormat;
   let allowNull: boolean;
   inputFormat = typeof args[1] === 'string' ? args[1] : 'YYYY-MM-DD';

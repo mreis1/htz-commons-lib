@@ -81,16 +81,16 @@ describe('ensure-valid-date.spec.ts', function () {
         describe('#SimpleOptions', () => {
           describe('Passing a moment as a default value', () => {
             const d = ensureValidDate('', moment());
-            expect(moment.isMoment(d)).toBe(true)
-          })
+            expect(moment.isMoment(d)).toBe(true);
+          });
           describe('Passing a date as a default value', () => {
             const d = ensureValidDate('', new Date());
-            expect(moment.isDate(d)).toBe(true)
-          })
+            expect(moment.isDate(d)).toBe(true);
+          });
           describe('Passing a string as a default value', () => {
             const d = ensureValidDate('', '2022-10-12');
-            expect(d).toBe('2022-10-12')
-          })
+            expect(d).toBe('2022-10-12');
+          });
 
           it('should should register custom formats', function () {
             expect(() =>
