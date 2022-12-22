@@ -1,6 +1,6 @@
 {
   "name": "htz-commons-lib",
-  "version": "1.6.8",
+  "version": "1.6.9",
   "description": "A suite of different libraries that allow you to ensure values of certain types",
   "main": "index.js",
   "types": "index.d.ts",
