@@ -1,6 +1,9 @@
-import { isNullOrUndefined } from '../../utils';
-
-export function padding(value: string, numChar: number, paddingChar = '0', paddingAt: 'right' | 'left' = 'right') {
+export function padding(
+  value: string,
+  numChar: number,
+  paddingChar = '0',
+  paddingAt: 'right' | 'left' = 'right'
+) {
   if (typeof value !== 'string') {
     throw new Error('Value must be a valid string');
   }
@@ -11,7 +14,7 @@ export function padding(value: string, numChar: number, paddingChar = '0', paddi
     throw new Error('Invalid `numChar`');
   }
 
-  if (isNullOrUndefined(value) || numChar <= 0) {
+  if (value === void 0 || numChar <= 0) {
     return value;
   }
   if (value.length >= numChar) {
@@ -30,6 +33,10 @@ export function padding(value: string, numChar: number, paddingChar = '0', paddi
 export function paddingLeft(value: string, numChar: number, paddingChar = '0') {
   return padding(value, numChar, paddingChar, 'left');
 }
-export function paddingRight(value: string, numChar: number, paddingChar = '0') {
+export function paddingRight(
+  value: string,
+  numChar: number,
+  paddingChar = '0'
+) {
   return padding(value, numChar, paddingChar, 'right');
 }

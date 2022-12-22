@@ -12,7 +12,7 @@ describe('#ensureValidNumber', function () {
       expect(ensureValidNumber('01', void 0, {})).toBe(1);
       expect(ensureValidNumber('00001', void 0, {})).toBe(1);
       expect(ensureValidNumber('00', void 0, {})).toBe(0);
-    })
+    });
     test('using comma', () => {
       /*default*/
       expect(ensureValidNumber('2,11', void 0, {})).toBe(void 0);

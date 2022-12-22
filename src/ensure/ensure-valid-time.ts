@@ -44,7 +44,6 @@ export function ensureValidTime(
     m = options.defaults.m;
     s = options.defaults.s;
 
-
     if (len >= 1) {
       h = ensureValidNumber(parts[0]);
       // Not between 0 and 23
