@@ -40,6 +40,19 @@ export function ensureValidNumber(
     if (t === 'string') {
       value = value.trim();
       value = value.replace(',', '.'); // for backward compatibility - replace , with .
+      // Get rid of left hand zeros.
+      // because JSON parser will throw on those cases.
+      if (value[0] === '0') {
+        let parts = value.split('');
+        let maxPartsIdx = parts.length - 1;
+        let finalStr = '';
+        parts.forEach((item, idx) => {
+          if (idx === maxPartsIdx || (idx < maxPartsIdx && item !== '0')) {
+            finalStr += item;
+          }
+        });
+        value = finalStr;
+      }
       value = tryJSONParse(value);
       if (value === void 0) {
         return fallback;
