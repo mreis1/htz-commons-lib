@@ -14,7 +14,10 @@ describe('ensure-valid-date.spec.ts', function () {
       expect(r).toBeDefined();
       expect(r.format(formatStr)).toEqual(d.format(formatStr));
     });
-    test('A string should be parsed as YYYY-MM-DD', function () {
+    test('A valid string input should return a moment instance', function () {
+      expect(moment.isMoment(ensureValidDate('2022-10-01'))).toBe(true);
+    });
+    test('The default parse format for strings must be YYYY-MM-DD', function () {
       let input = '2019-06-20';
       let r = ensureValidDate(input);
       let formatStr = 'YYYY-MM-DD';
