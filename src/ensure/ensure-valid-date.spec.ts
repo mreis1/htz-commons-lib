@@ -311,7 +311,6 @@ describe('ensure-valid-date.spec.ts', function () {
       expect(x(new Date().toString())).toBe(void 0);
       // --
       let src = '2023-01-19T09:37:23.668Z';
-      console.log(x(src));
       expect(x(src).toISOString()).toBe(src);
       // --
       expect(x('2022-01-200')).toBe(undefined);

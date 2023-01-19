@@ -134,7 +134,6 @@ function _ensureValidDate(date: any, options?: EnsureValidDateOpts): Moment {
     } else if (isDate) {
       m = moment(date);
     } else if (typeof date === 'string') {
-      console.log(onInvalidStringFormat, onInvalidStringFormat === 'throw');
       if (
         onInvalidStringFormat === 'throw' ||
         onInvalidStringFormat === 'defaultValue'
@@ -145,11 +144,8 @@ function _ensureValidDate(date: any, options?: EnsureValidDateOpts): Moment {
             'No RegExp available for format(' + inputFormat + ')'
           );
         }
-        console.log('regExpStr', regExpStr);
         const exp = new RegExp(regExpStr); // Verify that strings matches
-        console.log(`Testing: `, regExpStr, date);
         if (!exp.test(date)) {
-          console.log(`Test did  not pass`, regExpStr, date);
           if (onInvalidStringFormat === 'throw') {
             throw new Error('Input value has incorrect format');
           } else {
@@ -224,11 +220,6 @@ export function createInstance(
   defaultOptions: IDefaultOptions
 ): EnsureValidDateSignature {
   const defaults = _defaultsSet(DEFAULTS, defaultOptions);
-  console.log({
-    DEFAULTS,
-    defaults,
-    defaultOptions,
-  });
   return <any>((data: any, ...args: any[]): Moment => {
     const callDefaults = { ...defaults };
     const isMomentDefaultValue = moment.isMoment(args[0]);
@@ -249,11 +240,6 @@ export function createInstance(
         ...callOptions,
         ...p,
       };
-      console.log({
-        p,
-        callOptions,
-        options,
-      });
       return _ensureValidDate(data, options);
     } else {
       const p = _defaultsSet(callDefaults, args[0]);
@@ -262,11 +248,6 @@ export function createInstance(
         ...args[0],
         ...p,
       };
-      console.log({
-        p,
-        callOptions: args[0],
-        options,
-      });
       return _ensureValidDate(data, options);
     }
   });
