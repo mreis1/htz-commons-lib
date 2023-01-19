@@ -5,6 +5,12 @@ import moment from 'moment';
 export enum DateFormatRegMapBaseOpts {
   'YYYY-MM-DD',
   'YYYY-MM-DD HH:mm:ss',
+  /**
+   * ISOString:
+   * An example can be obtained through:
+   * new Date().toISOString() method returns a string in simplified extended ISO format (ISO_8601),
+   * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString
+   */
   'ISOString',
 }
 export type KnownDateFormats = keyof typeof DateFormatRegMapBaseOpts;
@@ -49,33 +55,42 @@ export function unregisterRegExp(f: string) {
     DATE_FORMAT_REGEXP_MAP[f] = void 0;
   }
 }
-export type OnInvalidStringFormat = 'ignore' | 'defaultValue' | 'throw';
-export interface EnsureValidDateOpts {
+
+interface IDefaultOptions {
+  allowNull: boolean;
   /**
    *
-   * - ignore:
-   *    Even if you pass a string that doesn't match the expected format this will work
+   * - Ignore (use case to consider):
+   *    You pass a string to server, since we are in ignore mode,
+   *    string will be passed to moment directly and we relly on it's parsing capabilities.
+   *
    *    ```
    *      moment('2022-12-13T09:00:28.371Z', 'YYYY-MM-DD').isValid()
    *    => true
    *   ```
    * - defaultValue:
-   *    String will be matches agains a regexp and if value is incorrect it will
+   *    String will be matches against a regexp and if value is incorrect it will return the default value
    *
-   * @default 'defaultValue'
+   * @default DEFAULTS.onInvalidStringFormat<'ignore'>
    */
-  onInvalidStringFormat?: OnInvalidStringFormat;
-  /**
-   * @default 'YYYY-MM-DD'
-   */
-  inputFormat?: string;
-  defaultValue?: string;
+  onInvalidStringFormat: OnInvalidStringFormat;
+  inputFormat: KnownDateFormats | (string & {});
+}
+
+/**
+ * See info in EnsureValidDateOpts.onInvalidStringFormat
+ */
+export type OnInvalidStringFormat = 'ignore' | 'defaultValue' | 'throw';
+
+export interface EnsureValidDateOpts extends Partial<IDefaultOptions> {
+  defaultValue?: any;
   /**
    * When true, if input data is null null will be preserved
    * @default: false
    */
   allowNull?: boolean;
 }
+
 export type EnsureValidDateOptsSimple = Omit<
   EnsureValidDateOpts,
   'defaultValue' | 'inputFormat'
@@ -86,65 +101,22 @@ const DEFAULTS = {
   onInvalidStringFormat: <OnInvalidStringFormat>'ignore',
   inputFormat: <KnownDateFormats>'YYYY-MM-DD',
 };
+
 /**
  * Ensures that input is a valid date.
  * If a string a is provided we'll use inputFormat to parse the date.
  * Make sure to provide the appropriate format.
- *
  */
-export function ensureValidDate(
-  data: any,
-  options?: EnsureValidDateOpts
-): Moment;
-export function ensureValidDate(
-  data: any,
-  defaultValue?,
-  inputFormat? /*= 'YYYY-MM-DD'*/,
-  simpleOpts?: EnsureValidDateOptsSimple
-): Moment;
-export function ensureValidDate(date: any, ...args): Moment {
+function _ensureValidDate(date: any, options?: EnsureValidDateOpts): Moment {
   const nullOrUndefinedOrEmpty = isNullOrUndefinedOrEmptyStr(date);
-  let defaultValue: any;
+  const defaultValue: any = options.defaultValue;
   const isMoment = moment.isMoment(date);
   const isDate = !isMoment && moment.isDate(date);
-  const isMomentDefaultValue = moment.isMoment(args[0]);
-  const isDateDefaultValue = !isMomentDefaultValue && moment.isDate(args[0]);
   // ----
-  let inputFormat: string;
-  let simpleOpts: EnsureValidDateOptsSimple =
-    args.length === 0 ||
-    (args.length === 1 && (isMomentDefaultValue || isDate)) ||
-    (args[2] && typeof args[2] === 'object')
-      ? args[2]
-      : void 0;
-  let onInvalidStringFormat: OnInvalidStringFormat;
-  let allowNull: boolean;
-  inputFormat = typeof args[1] === 'string' ? args[1] : 'YYYY-MM-DD';
-
-  if (simpleOpts) {
-    onInvalidStringFormat = simpleOpts.onInvalidStringFormat;
-    allowNull = simpleOpts.allowNull;
-  }
-  // Check if we are dealing with a options object as first argument
-  // Which means we would be dealing with a method signature as follow: `ensureValidDate(data: any, options: Options)`
-  else if (
-    args[0] !== null &&
-    args[0] !== void 0 &&
-    typeof args[0] === 'object' &&
-    !isMomentDefaultValue &&
-    !isDateDefaultValue &&
-    args.length === 1
-  ) {
-    let options = args[0] as EnsureValidDateOpts;
-    onInvalidStringFormat = options.onInvalidStringFormat;
-    allowNull =
-      typeof options.allowNull === 'boolean'
-        ? options.allowNull
-        : DEFAULTS.allowNull;
-    inputFormat = options.inputFormat;
-  } else {
-    defaultValue = args[0]; // Probably undefined on basic calls
-  }
+  let inputFormat = options.inputFormat;
+  let onInvalidStringFormat: OnInvalidStringFormat =
+    options.onInvalidStringFormat;
+  let allowNull: boolean = options.allowNull;
 
   if (nullOrUndefinedOrEmpty) {
     if (allowNull && date === null) {
@@ -154,12 +126,15 @@ export function ensureValidDate(date: any, ...args): Moment {
   } else if (date) {
     let m: Moment;
     if (isMoment) {
+      if (!date.isValid) {
+        return defaultValue;
+      }
       // Check if is moment object.
       m = date;
     } else if (isDate) {
       m = moment(date);
     } else if (typeof date === 'string') {
-      inputFormat = inputFormat ?? DEFAULTS.inputFormat;
+      console.log(onInvalidStringFormat, onInvalidStringFormat === 'throw');
       if (
         onInvalidStringFormat === 'throw' ||
         onInvalidStringFormat === 'defaultValue'
@@ -170,17 +145,26 @@ export function ensureValidDate(date: any, ...args): Moment {
             'No RegExp available for format(' + inputFormat + ')'
           );
         }
+        console.log('regExpStr', regExpStr);
         const exp = new RegExp(regExpStr); // Verify that strings matches
+        console.log(`Testing: `, regExpStr, date);
         if (!exp.test(date)) {
+          console.log(`Test did  not pass`, regExpStr, date);
           if (onInvalidStringFormat === 'throw') {
             throw new Error('Input value has incorrect format');
           } else {
             return defaultValue;
           }
         }
-        m = moment(date, inputFormat, null);
+        if (inputFormat === 'ISOString') {
+          m = moment(date, moment.ISO_8601);
+        } else {
+          m = moment(date, inputFormat);
+        }
       } else {
-        m = moment(date, inputFormat, null);
+        // Notice, if onInvalidStringFormat = 'ignore'
+        // we leave moment decide how to parse the date
+        m = moment(date);
       }
     } else {
       return defaultValue;
@@ -192,3 +176,132 @@ export function ensureValidDate(date: any, ...args): Moment {
     }
   }
 }
+
+export type EnsureValidDateSignature1 = (
+  data: any,
+  options?: EnsureValidDateOpts
+) => Moment;
+export type EnsureValidDateSignature2 = (
+  data: any,
+  defaultValue?: string | Date | moment.Moment | any,
+  inputFormat? /*= 'YYYY-MM-DD'*/,
+  simpleOpts?: EnsureValidDateOptsSimple
+) => Moment;
+export type EnsureValidDateSignature = EnsureValidDateSignature1 &
+  EnsureValidDateSignature2;
+
+/**
+ * @param generalDefaults
+ * @param customDefaults
+ */
+export function _defaultsSet(
+  generalDefaults: IDefaultOptions,
+  customDefaults: IDefaultOptions
+): IDefaultOptions {
+  const defaults = { ...generalDefaults }; // Initialize with DEFAULTS
+  // Then patch with createInstance defaults
+  Object.keys(customDefaults).forEach((key) => {
+    const k = <keyof IDefaultOptions>key;
+    if (k === 'inputFormat') {
+      if (typeof customDefaults[key] === 'string') {
+        defaults[k] = customDefaults[key];
+      }
+    } else if (k === 'onInvalidStringFormat') {
+      const o: OnInvalidStringFormat[] = ['defaultValue', 'ignore', 'throw'];
+      if (o.includes(customDefaults[k])) {
+        defaults[k] = customDefaults[key];
+      }
+    } else if (k === 'allowNull') {
+      if (typeof customDefaults[key] === 'boolean') {
+        defaults[k] = customDefaults[key];
+      }
+    }
+  });
+  return defaults;
+}
+
+export function createInstance(
+  defaultOptions: IDefaultOptions
+): EnsureValidDateSignature {
+  const defaults = _defaultsSet(DEFAULTS, defaultOptions);
+  console.log({
+    DEFAULTS,
+    defaults,
+    defaultOptions,
+  });
+  return <any>((data: any, ...args: any[]): Moment => {
+    const callDefaults = { ...defaults };
+    const isMomentDefaultValue = moment.isMoment(args[0]);
+    const isDateDefaultValue = !isMomentDefaultValue && moment.isDate(args[0]);
+    const isModernCall =
+      args.length === 1 &&
+      typeof args[0] === 'object' &&
+      !isMomentDefaultValue &&
+      !isDateDefaultValue; // Note this line of statement
+    if (!isModernCall) {
+      // Transform a simpleCall into a modern call
+      const callOptions = args[2] ? args[2] : {};
+      callOptions.inputFormat = args[1];
+      callOptions.defaultValue = args[0];
+      const p = _defaultsSet(callDefaults, callOptions);
+      const options = {
+        ...callDefaults,
+        ...callOptions,
+        ...p,
+      };
+      console.log({
+        p,
+        callOptions,
+        options,
+      });
+      return _ensureValidDate(data, options);
+    } else {
+      const p = _defaultsSet(callDefaults, args[0]);
+      const options = {
+        ...callDefaults,
+        ...args[0],
+        ...p,
+      };
+      console.log({
+        p,
+        callOptions: args[0],
+        options,
+      });
+      return _ensureValidDate(data, options);
+    }
+  });
+}
+
+/**
+ * @deprecated Use ensureValidDateStrict() instead
+ */
+export const ensureValidDate = createInstance({
+  onInvalidStringFormat: 'ignore',
+  inputFormat: 'YYYY-MM-DD',
+  allowNull: false,
+});
+
+/**
+ * The new way to evaluate dates.
+ *
+ * Same as ensureValidDate with slightly differences:
+ * - Different defaults
+ * - Received input must match a particular string format (regex) which means
+ *    passing timestamps will obviously endup returning the defaultValue
+ *
+ *
+ *    Deprecation warning: value provided is not in a recognized RFC2822 or ISO format.
+ *    moment construction falls back to js Date(), which is not reliable across all browsers and versions.
+ *    Non RFC2822/ISO date formats are discouraged. Please refer to http://momentjs.com/guides/#/warnings/js-date/ for more info.
+ */
+export const ensureValidDateStrict = createInstance({
+  onInvalidStringFormat: 'defaultValue',
+  inputFormat: 'YYYY-MM-DD',
+  allowNull: false,
+});
+
+export const ensureValidTimestampStrict = createInstance({
+  onInvalidStringFormat: 'defaultValue',
+  inputFormat: 'ISOString',
+  allowNull: false,
+});
