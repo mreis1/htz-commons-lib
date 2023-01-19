@@ -20,7 +20,6 @@ import moment = require('moment');
 //   });
 // });
 describe('ensure-valid-date.spec.ts', function () {
-
   /**
    * Defaults ARE:
    */
@@ -29,7 +28,9 @@ describe('ensure-valid-date.spec.ts', function () {
     test('foo', () => {
       const o = ensureValidDate('2022-02-02');
       expect(moment.isMoment(o)).toBe(true);
-      expect(moment.isMoment(ensureValidDate('2022-12-13T09:00:28.371Z'))).toBe(true);
+      expect(moment.isMoment(ensureValidDate('2022-12-13T09:00:28.371Z'))).toBe(
+        true
+      );
     });
     test('A Date object should be reused if provided', function () {
       let d = new Date();
@@ -97,12 +98,8 @@ describe('ensure-valid-date.spec.ts', function () {
          * This example, shows why we must specify a onInvalidFormat
          */
         test('should return defaultValue if cant parse date expression', function () {
-          expect(ensureValidDate('2016-12-2022')).toEqual(
-            void 0
-          );
-          expect(ensureValidDate('2016-12-2022', 'foo')).toEqual(
-            'foo'
-          );
+          expect(ensureValidDate('2016-12-2022')).toEqual(void 0);
+          expect(ensureValidDate('2016-12-2022', 'foo')).toEqual('foo');
         });
       });
 
@@ -165,8 +162,7 @@ describe('ensure-valid-date.spec.ts', function () {
           it('Should not allow null values', () => {
             expect(ensureValidDate(null, void 0)).toBe(void 0);
             expect(ensureValidDate(null, {})).toBe(void 0);
-            expect(ensureValidDate(null, {},
-              null, {})).toStrictEqual({});
+            expect(ensureValidDate(null, {}, null, {})).toStrictEqual({});
           });
         });
         describe('#SimpleOptions', () => {
@@ -206,80 +202,104 @@ describe('ensure-valid-date.spec.ts', function () {
 
     test('General Tests', () => {
       expect(ensureValidDate(null, 'xx')).toBe('xx');
-      expect(ensureValidDate(null, { allowNull: false, defaultValue: 'xx' })).toBe('xx');
-      expect(ensureValidDate(null, { allowNull: true, defaultValue: 'xx' })).toBe(null);
-      expect(ensureValidDate(null, {allowNull: true})).toBe(null);
+      expect(
+        ensureValidDate(null, { allowNull: false, defaultValue: 'xx' })
+      ).toBe('xx');
+      expect(
+        ensureValidDate(null, { allowNull: true, defaultValue: 'xx' })
+      ).toBe(null);
+      expect(ensureValidDate(null, { allowNull: true })).toBe(null);
       expect(ensureValidDate(new Date().toString())).not.toBe(void 0);
       // ---
       let src = '2023-01-19T09:37:23.668Z';
       let o = ensureValidDate(src);
-      expect(moment.isMoment(o)).toBe(true)
+      expect(moment.isMoment(o)).toBe(true);
       expect(o.toISOString()).toBe(src);
       // ---
       src = '2022-01-20';
       o = ensureValidDate(src);
-      expect(moment.isMoment(o)).toBe(true)
+      expect(moment.isMoment(o)).toBe(true);
       expect(o.format('YYYY-MM-DD')).toBe(src);
       // ---
       src = '01-01-2020';
       o = ensureValidDate(src);
-      expect(moment.isMoment(o)).toBe(true)
+      expect(moment.isMoment(o)).toBe(true);
       expect(o.format('DD-MM-YYYY')).toBe(src);
       // ---
-      expect(ensureValidDate('2022-01-20').format('YYYY-MM-DD')).toBe('2022-01-20')
+      expect(ensureValidDate('2022-01-20').format('YYYY-MM-DD')).toBe(
+        '2022-01-20'
+      );
       // ---
       src = new Date().toISOString();
       expect(ensureValidDate(src, 'a').toISOString()).toBe(src);
       // ---
       src = '2023-01-19T09:37:23.668Z-INVALID'; // <--- this is invalid string
-      expect(ensureValidDate(src, {
-        defaultValue: 'a'
-      })).toBe('a');
-    })
+      expect(
+        ensureValidDate(src, {
+          defaultValue: 'a',
+        })
+      ).toBe('a');
+    });
   });
 
   describe('#createInstance to generate a strict method', () => {
     const ensureValidDate = createInstance({
       onInvalidStringFormat: 'defaultValue',
       inputFormat: 'YYYY-MM-DD',
-      allowNull: false
+      allowNull: false,
     });
     test('General Tests', () => {
       expect(ensureValidDate(null, 'xx')).toBe('xx');
-      expect(ensureValidDate(null, { allowNull: false, defaultValue: 'xx' })).toBe('xx');
-      expect(ensureValidDate(null, { allowNull: true, defaultValue: 'xx' })).toBe(null);
-      expect(ensureValidDate(null, {allowNull: true})).toBe(null);
+      expect(
+        ensureValidDate(null, { allowNull: false, defaultValue: 'xx' })
+      ).toBe('xx');
+      expect(
+        ensureValidDate(null, { allowNull: true, defaultValue: 'xx' })
+      ).toBe(null);
+      expect(ensureValidDate(null, { allowNull: true })).toBe(null);
       expect(ensureValidDate(new Date().toString())).toBe(void 0);
-      expect(ensureValidDate('2023-01-19T09:37:23.668Z')).toBe(void 0)
-      expect(ensureValidDate('2022-01-200')).toBe(undefined)
-      expect(ensureValidDate('01-01-2020')).toBe(undefined)
-      expect(ensureValidDate('2022-01-20').format('YYYY-MM-DD')).toBe('2022-01-20')
+      expect(ensureValidDate('2023-01-19T09:37:23.668Z')).toBe(void 0);
+      expect(ensureValidDate('2022-01-200')).toBe(undefined);
+      expect(ensureValidDate('01-01-2020')).toBe(undefined);
+      expect(ensureValidDate('2022-01-20').format('YYYY-MM-DD')).toBe(
+        '2022-01-20'
+      );
       expect(ensureValidDate(new Date().toString(), 'a')).toBe('a');
-      expect(ensureValidDate(new Date().toString(), {
-        defaultValue: 'a'
-      })).toBe('a');
-    })
-  })
+      expect(
+        ensureValidDate(new Date().toString(), {
+          defaultValue: 'a',
+        })
+      ).toBe('a');
+    });
+  });
 
   describe('#ensureValidDateStrict', () => {
     const ensureValidDate = ensureValidDateStrict;
     test('General Tests', () => {
       let o: any;
       expect(ensureValidDate(null, 'xx')).toBe('xx');
-      expect(ensureValidDate(null, { allowNull: false, defaultValue: 'xx' })).toBe('xx');
-      expect(ensureValidDate(null, { allowNull: true, defaultValue: 'xx' })).toBe(null);
-      expect(ensureValidDate(null, {allowNull: true})).toBe(null);
+      expect(
+        ensureValidDate(null, { allowNull: false, defaultValue: 'xx' })
+      ).toBe('xx');
+      expect(
+        ensureValidDate(null, { allowNull: true, defaultValue: 'xx' })
+      ).toBe(null);
+      expect(ensureValidDate(null, { allowNull: true })).toBe(null);
       expect(ensureValidDate(new Date().toString())).toBe(void 0);
-      expect(ensureValidDate('2023-01-19T09:37:23.668Z')).toBe(void 0)
-      expect(ensureValidDate('2022-01-200')).toBe(undefined)
-      expect(ensureValidDate('01-01-2020')).toBe(undefined)
-      expect(ensureValidDate('2022-01-20').format('YYYY-MM-DD')).toBe('2022-01-20')
+      expect(ensureValidDate('2023-01-19T09:37:23.668Z')).toBe(void 0);
+      expect(ensureValidDate('2022-01-200')).toBe(undefined);
+      expect(ensureValidDate('01-01-2020')).toBe(undefined);
+      expect(ensureValidDate('2022-01-20').format('YYYY-MM-DD')).toBe(
+        '2022-01-20'
+      );
       expect(ensureValidDate(new Date().toString(), 'a')).toBe('a');
-      expect(ensureValidDate(new Date().toString(), {
-        defaultValue: 'a'
-      })).toBe('a');
-    })
-  })
+      expect(
+        ensureValidDate(new Date().toString(), {
+          defaultValue: 'a',
+        })
+      ).toBe('a');
+    });
+  });
 
   describe('#ensureValidTimestampStrict()', () => {
     const x = ensureValidTimestampStrict;
@@ -287,20 +307,22 @@ describe('ensure-valid-date.spec.ts', function () {
       expect(x(null, 'xx')).toBe('xx');
       expect(x(null, { allowNull: false, defaultValue: 'xx' })).toBe('xx');
       expect(x(null, { allowNull: true, defaultValue: 'xx' })).toBe(null);
-      expect(x(null, {allowNull: true})).toBe(null);
+      expect(x(null, { allowNull: true })).toBe(null);
       expect(x(new Date().toString())).toBe(void 0);
       // --
       let src = '2023-01-19T09:37:23.668Z';
-      console.log(x(src))
+      console.log(x(src));
       expect(x(src).toISOString()).toBe(src);
       // --
-      expect(x('2022-01-200')).toBe(undefined)
-      expect(x('01-01-2020')).toBe(undefined)
-      expect(x('2022-01-20')).toBe(void 0)
+      expect(x('2022-01-200')).toBe(undefined);
+      expect(x('01-01-2020')).toBe(undefined);
+      expect(x('2022-01-20')).toBe(void 0);
       expect(x(new Date().toString(), 'a')).toBe('a');
-      expect(x(new Date().toString(), {
-        defaultValue: 'a'
-      })).toBe('a');
-    })
-  })
+      expect(
+        x(new Date().toString(), {
+          defaultValue: 'a',
+        })
+      ).toBe('a');
+    });
+  });
 });
