@@ -1,6 +1,6 @@
 import { Moment } from 'moment';
 import { isNullOrUndefinedOrEmptyStr } from '../utils';
-import moment from 'moment';
+import * as moment from 'moment';
 
 export enum DateFormatRegMapBaseOpts {
   'YYYY-MM-DD',
