@@ -227,6 +227,7 @@ export function createInstance(
     const isModernCall =
       args.length === 1 &&
       typeof args[0] === 'object' &&
+      (args[0] !== null && args[0] !== void 0) &&
       !isMomentDefaultValue &&
       !isDateDefaultValue; // Note this line of statement
     if (!isModernCall) {

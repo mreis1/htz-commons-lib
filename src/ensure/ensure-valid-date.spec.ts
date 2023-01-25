@@ -32,6 +32,13 @@ describe('ensure-valid-date.spec.ts', function () {
         true
       );
     });
+    test('we should be able to pass null or undefined as default value in simple call', () => {
+      let o: any;
+      o = ensureValidDate('AAA', null);
+      expect(o).toBe(null);
+      o = ensureValidDate('AAA', void 0);
+      expect(o).toBe(void 0);
+    });
     test('A Date object should be reused if provided', function () {
       let d = new Date();
       expect(ensureValidDate(d)).toBeDefined();
