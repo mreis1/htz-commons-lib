@@ -99,5 +99,5 @@ describe('ensure', () => {
         })
       ).toBe(null);
     });
-  })
+  });
 });
