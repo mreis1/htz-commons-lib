@@ -93,12 +93,20 @@ describe('ensure', () => {
         return new CustomError(x);
       },
     });
-    it('should throw', () => {
+    it('should not throw', () => {
       expect(
         eInstanceNull('number', null, {
           allowNegative: true,
         })
       ).toBe(null);
+    });
+    it('should throw', () => {
+      expect(
+        () =>
+        eInstanceNull('number', void 0, {
+          allowNegative: true,
+        })
+      ).toThrow();
     });
   });
 });
