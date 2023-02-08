@@ -9,17 +9,39 @@ export interface IValidTimeResult {
   sTime: number; // The total time in seconds
 }
 
+export interface EnsureValidTimeOptions {
+  /**
+   * Set defaults to minutes or to seconds if
+   */
+  defaults?: { m: number; s: number };
+  /**
+   * The defaultValue to be applied when there's no value
+   * @default void 0
+   */
+  defaultValue?: any;
+  /**
+   * @default false
+   */
+  allowNull?: boolean;
+}
+
 /**
  * @param srcStr
  * @param options
+ *
+ * @todo: Implement a strict method
+ *
  * @returns void if value is not valid
  */
 export function ensureValidTime(
   srcStr,
-  options?: { defaults: { m: number; s: number } }
+  options?: EnsureValidTimeOptions
 ): IValidTimeResult {
   let DEFAULT_VALUE = 0;
   options = options || ({} as any);
+  if (options?.allowNull && srcStr === null) {
+    return null;
+  }
   if ('defaults' in options) {
     if (!('m' in options.defaults)) {
       options.defaults.m = DEFAULT_VALUE;
@@ -48,20 +70,20 @@ export function ensureValidTime(
       h = ensureValidNumber(parts[0]);
       // Not between 0 and 23
       if (!(h >= 0 && h <= 23)) {
-        return void 0;
+        return options.defaultValue;
       }
     }
     if (len >= 2) {
       m = ensureValidNumber(parts[1]);
       // Not between 0 and 59
       if (!(m >= 0 && m <= 59)) {
-        return void 0;
+        return options.defaultValue;
       }
     }
     if (len >= 3) {
       s = ensureValidNumber(parts[2]);
       if (!(s >= 0 && s <= 59)) {
-        return void 0;
+        return options.defaultValue;
       }
     }
 

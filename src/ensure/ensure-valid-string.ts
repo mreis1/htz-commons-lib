@@ -1,7 +1,6 @@
 import { isObject } from '../utils';
-import { ensureValidNumber } from './ensure-valid-number';
 
-interface EnsureValidStringOpts {
+export interface EnsureValidStringOpts {
   /**
    * Will run character replacement before checking min-length
    */
@@ -52,18 +51,28 @@ interface EnsureValidStringOpts {
   transform?: 'none' | 'upperCase' | 'lowerCase';
 }
 
+export function ensureValidString(str: string, options: EnsureValidStringOpts)
+export function ensureValidString(str: string, defaultValue, options: Omit<EnsureValidStringOpts, 'defaultValue'>)
 export function ensureValidString(
   str: string,
-  defaultValueOrOptions?: EnsureValidStringOpts | string
+  ...args
 ) {
+  /*
   const t = typeof defaultValueOrOptions;
   const tIsObj = isObject(defaultValueOrOptions);
   let options: EnsureValidStringOpts;
-  options = tIsObj ? (defaultValueOrOptions as EnsureValidStringOpts) : {};
-
+  **/
+  let options: EnsureValidStringOpts;
+  let defaultValue: any;
+  if (args.length === 1 && isObject(args[0])) {
+    options = args[0];
+    defaultValue = options.defaultValue;
+  } else {
+    options = args[1] ?? {};
+    defaultValue = args[0];
+  }
   let {
     minLength,
-    defaultValue,
     maxLength,
     onMaxLengthKo,
     trim,
@@ -74,10 +83,11 @@ export function ensureValidString(
     accepts,
   } = options;
 
-  if (!tIsObj) {
-    defaultValue = defaultValueOrOptions;
-  }
   allowNull = typeof allowNull === 'boolean' ? allowNull : false;
+  if (allowNull && str === null) {
+    return str;
+  }
+
   trim = typeof trim === 'boolean' ? trim : false;
   minLength =
     typeof minLength === 'number' && !isNaN(minLength) && minLength >= 0
@@ -141,9 +151,6 @@ export function ensureValidString(
 
     return str;
   } else {
-    if (allowNull) {
-      return null;
-    }
     return defaultValue;
   }
 }

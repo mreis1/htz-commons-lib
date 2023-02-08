@@ -5,6 +5,14 @@
  *
  * @param input
  * @param defaultValue  (default = void 0)
+ *
+ * @equivalentTo
+ * ```
+ * ensureBoolean(value, {
+ *   strictType: true,
+ *   defaultValue: void 0
+ * })
+ * ```
  */
 export function ensureValidBool(input, defaultValue?) {
   return typeof input === 'boolean' ? input : defaultValue;

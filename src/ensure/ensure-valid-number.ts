@@ -1,4 +1,4 @@
-import { tryJSONParse } from '../utils';
+import { isObject, tryJSONParse } from '../utils';
 
 export interface EnsureValidNumberOptions {
   /**
@@ -8,32 +8,49 @@ export interface EnsureValidNumberOptions {
    * @default false
    */
   convertDecimal?: boolean;
+  /**
+   * Either we should consider negative values or not during parsing
+   * @default false
+   */
   allowNegative?: boolean;
+  /**
+   * When true, if input value has null type, then null is returned.
+   * @default false
+   */
   allowNull?: boolean;
+}
+export interface EnsureValidNumberOptionsWithDefault
+  extends EnsureValidNumberOptions {
+  defaultValue?: any;
 }
 /**
  * Attempts to parse a numeric string
  *
  * Few notes:
  *
- *
  * Parsing numbers:
  *  https://stackoverflow.com/a/46621393/1084568
  *    Migrating to JSON might be
  *
- * @param value
- * @param fallback
- * @param options
- * @param options.convertDecimal  {boolean} (false)   Either a decimal string should be converted to integer (Example: '11.11' => 11)
- * @param options.allowNegative   {boolean} (false)   Either we should consider negative values or not during parsing
- * @param options.allowNull       {boolean} (false)   When true, if input value has null type, then null is returned.
- * @returns {any}
  */
 export function ensureValidNumber(
   value: any,
-  fallback?,
+  options?: EnsureValidNumberOptionsWithDefault
+);
+export function ensureValidNumber(
+  value: any,
+  defaultValue?: any,
   options?: EnsureValidNumberOptions
-) {
+);
+export function ensureValidNumber(value: any, ...args) {
+  let defaultValue: any, options: EnsureValidNumberOptionsWithDefault;
+  if (args.length === 1 && isObject(args[0])) {
+    options = args[0] ?? {};
+    defaultValue = options.defaultValue;
+  } else {
+    defaultValue = args[0];
+    options = args[1] ?? {};
+  }
   options = options || ({} as any);
   if (value !== void 0 && value != null) {
     let t = typeof value;
@@ -55,22 +72,22 @@ export function ensureValidNumber(
       }
       value = tryJSONParse(value);
       if (value === void 0) {
-        return fallback;
+        return defaultValue;
       }
     }
     if (isNaN(value)) {
-      return fallback;
+      return defaultValue;
     }
     if (!options.allowNegative && value < 0) {
-      return fallback;
+      return defaultValue;
     }
     if (!options?.convertDecimal && value?.toString().indexOf('.') >= 0) {
-      return fallback;
+      return defaultValue;
     }
 
     const parsed = parseInt(value, 0);
     if (isNaN(parsed)) {
-      return fallback;
+      return defaultValue;
     } else {
       return parsed;
     }
@@ -78,6 +95,6 @@ export function ensureValidNumber(
     if (options.allowNull && value === null) {
       return value;
     }
-    return fallback;
+    return defaultValue;
   }
 }

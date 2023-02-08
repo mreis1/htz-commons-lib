@@ -1,34 +1,64 @@
 import { tryJSONParse } from '../utils/try-json-parse';
+import { isObject } from '../utils';
 
 export interface EnsureBooleanOpts {
+  /**
+   * (default = false) When true, null value is preserved.
+   */
   allowNull?: boolean;
+  /**
+   * When true, boolean values.
+   * (default = false)
+   */
+  strictType?: boolean;
 }
+
+export interface EnsureBooleanOptsWithDefault extends EnsureBooleanOpts {
+  /**
+   * (default = void 0)
+   */
+  defaultValue?: any;
+}
+
 /**
  * Accepts:
  *  true:  -> 1, "1", "true", true
  *  false: -> 0, "0", "false", false
  *
  * Anything else should return defaultValue
- *
- * @param data
- * @param defaultValue (default = void 0)
- * @param opts
- * @param opts.allowNull    (default = false) When true, null value is preserved.
  */
-export function ensureBoolean(data, defaultValue?, opts?: EnsureBooleanOpts) {
-  if (opts?.allowNull && data === null) {
+export function ensureBoolean(data, options?: EnsureBooleanOptsWithDefault);
+export function ensureBoolean(data, defaultValue?, options?: EnsureBooleanOpts);
+export function ensureBoolean(data, ...args) {
+  let defaultValue: any, options: EnsureBooleanOptsWithDefault;
+  if (args.length === 1 && isObject(args[0])) {
+    options = args[0] ?? {};
+    defaultValue = options.defaultValue;
+  } else {
+    defaultValue = args[0];
+    options = args[1] ?? {};
+  }
+  if (options.allowNull && data === null) {
     return null;
   }
   if (typeof data === 'boolean') {
     return data;
   } else {
-    let v = tryJSONParse(data, defaultValue);
-    if (v === true || v === 1) {
-      return true;
-    } else if (v === false || v === 0) {
-      return false;
+    if (!options.strictType) {
+      let v = tryJSONParse(data, defaultValue);
+      if (v === true || v === 1) {
+        return true;
+      } else if (v === false || v === 0) {
+        return false;
+      } else {
+        return defaultValue;
+      }
     } else {
-      return defaultValue;
+      if (typeof data === 'boolean') {
+        return data;
+      } else {
+        return defaultValue;
+      }
     }
   }
 }

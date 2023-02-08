@@ -1,3 +1,5 @@
+import { isObject } from '../utils';
+
 export interface EnsureDecimalOptions {
   /**
    * When true, converts strings of numeric values where the decimal is represented with a comma (ex: "1,1" -> 1.11)
@@ -15,19 +17,35 @@ export interface EnsureDecimalOptions {
    */
   allowNull?: boolean;
 }
+export interface EnsureDecimalOptionsWithDefault extends EnsureDecimalOptions {
+  defaultValue?: any;
+}
 /**
  * Ensures that we are dealing with a valid number decimal or integer.
- * @param value
- * @param defaultValue    (default = void 0)
- * @param options
  */
+export function ensureValidDecimal(
+  value: any,
+  options?: EnsureDecimalOptionsWithDefault
+)
 export function ensureValidDecimal(
   value: any,
   defaultValue?,
   options?: EnsureDecimalOptions
+)
+export function ensureValidDecimal(
+  value: any,
+  ...args
 ) {
   const t = typeof value;
-  options = options || { replaceComma: true };
+  let defaultValue, options;
+  if (args.length === 1 && isObject(args[0])) {
+    options = args[0] ?? {};
+    defaultValue = options.defaultValue;
+  } else {
+    defaultValue = args[0];
+    options = args[1] ?? {};
+  }
+
   if (typeof options.replaceComma !== 'boolean') {
     options.replaceComma = true;
   }
