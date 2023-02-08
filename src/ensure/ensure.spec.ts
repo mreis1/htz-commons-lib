@@ -38,7 +38,7 @@ describe('ensure', () => {
       expect(() => ensure('date', 'aaaa-01-01', { eMode: 'STRICT' })).toThrow();
     });
   });
-  describe('Custom instance', () => {
+  describe('Custom instance not null', () => {
     class CustomError extends Error {
       constructor(...args) {
         super(...args);
@@ -46,7 +46,7 @@ describe('ensure', () => {
         Object.setPrototypeOf(this, CustomError.prototype);
       }
     }
-    let eInstance = createInstance({
+    let eInstanceNotNull = createInstance({
       eMode: 'STRICT',
       errorBuilder: (options) => {
         const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
@@ -55,28 +55,49 @@ describe('ensure', () => {
     });
     it('should throw', () => {
       expect(
-        eInstance('number', 0, {
+        eInstanceNotNull('number', 0, {
           allowNegative: true,
         })
       ).toBe(0);
       expect(
-        eInstance('number', -1, {
+        eInstanceNotNull('number', -1, {
           allowNegative: true,
         })
       ).toBe(-1);
       expect(() =>
-        eInstance('number', -1, {
+        eInstanceNotNull('number', -1, {
           allowNegative: false,
         })
       ).toThrow();
 
       expect(() =>
-        eInstance('string', '', {
+        eInstanceNotNull('string', '', {
           eField: 'xx',
-          allowNull: true,
           defaultValue: 0,
         })
       ).toThrow(/Field xx has incorrect value/);
     });
   });
+  describe('Custom instance null', () => {
+    class CustomError extends Error {
+      constructor(...args) {
+        super(...args);
+        Object.setPrototypeOf(this, CustomError.prototype);
+      }
+    }
+    let eInstanceNull = createInstance({
+      eMode: 'STRICT',
+      errorBuilder: (options) => {
+        const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
+        return new CustomError(x);
+      },
+    });
+    it('should throw', () => {
+      expect(
+        eInstanceNull('number', null, {
+          allowNegative: true,
+        })
+      ).toBe(null);
+    });
+  })
 });

@@ -128,6 +128,10 @@ export interface EnsureInstanceOptions {
   errorBuilder?: (opts: ErrorBuilderOptions) => any;
   // The ensure mode
   eMode?: Mode;
+  /**
+   * When true, your instance will automatically consider allowNull to be true
+   */
+  allowNull?: boolean;
 }
 
 export type EnsureOptions<
@@ -147,11 +151,12 @@ export function createInstance(opts: EnsureInstanceOptions) {
   return function <T extends Operation, Y extends boolean>(
     method: T,
     value: any,
-    options?: Omit<EnsureOptions<T>, 'eMode' | 'errorBuilder'>
+    options?: Omit<EnsureOptions<T>, 'eMode' | 'errorBuilder' | 'allowNull'>
   ): EnsureOutput<T, Y> {
     return ensure(method, value, {
       ...options,
       eMode: _opts.eMode,
+      allowNull: _opts.allowNull,
       errorBuilder: _opts.errorBuilder,
     } as EnsureOptions<T>);
   };
@@ -186,7 +191,6 @@ export function ensure<T extends Operation, Y extends boolean>(
   let valueIsNull = value === null;
   let output: any;
   if (options.allowNull && valueIsNull) {
-    console.log('options.allowNull && valueIsNull');
     output = null;
   } else {
     if (method === 'bool') {
