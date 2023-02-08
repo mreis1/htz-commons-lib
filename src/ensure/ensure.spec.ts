@@ -87,6 +87,7 @@ describe('ensure', () => {
     }
     let eInstanceNull = createInstance({
       eMode: 'STRICT',
+      allowNull: true,
       errorBuilder: (options) => {
         const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
         return new CustomError(x);
