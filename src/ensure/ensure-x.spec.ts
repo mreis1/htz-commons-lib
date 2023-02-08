@@ -35,7 +35,9 @@ describe('ensure', () => {
     });
 
     describe('#date', () => {
-      expect(() => ensureX('date', 'aaaa-01-01', { eMode: 'STRICT' })).toThrow();
+      expect(() =>
+        ensureX('date', 'aaaa-01-01', { eMode: 'STRICT' })
+      ).toThrow();
     });
   });
   describe('Custom instance not null', () => {

@@ -18,17 +18,17 @@ export interface PropOption<T extends Method> {
   >;
 }
 
-export type ModelOption<T> = Record<
-  keyof T,
-  Omit<PropOption<any>, 'value'>
->;
+export type ModelOption<T> = Record<keyof T, Omit<PropOption<any>, 'value'>>;
 
-export function option<T extends Method>(method: T, options: Omit<PropOption<T>, 'type'|'value'>): PropOption<T> {
-    return {
-      ...options,
-      value: void 0,
-      type: method
-    }
+export function option<T extends Method>(
+  method: T,
+  options: Omit<PropOption<T>, 'type' | 'value'>
+): PropOption<T> {
+  return {
+    ...options,
+    value: void 0,
+    type: method,
+  };
 }
 
 export interface CheckOptions {

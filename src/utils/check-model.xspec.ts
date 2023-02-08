@@ -45,7 +45,7 @@ describe('checkModel', () => {
         o(
           {
             dog: 'te2',
-            age: 12
+            age: 12,
           },
           {
             dog: option('string', {
@@ -54,16 +54,16 @@ describe('checkModel', () => {
               allowNull: true,
               options: {
                 defaultValue: null,
-                maxLength: 2
-              }
+                maxLength: 2,
+              },
             }),
             age: option('number', {
               mode: 'SOFT',
               options: {
-                allowNegative: true
+                allowNegative: true,
               },
-              allowNull: true
-            })
+              allowNull: true,
+            }),
           }
         )
       ).toThrow(/Field dog has incorrect value/);
