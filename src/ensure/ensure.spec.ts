@@ -101,8 +101,7 @@ describe('ensure', () => {
       ).toBe(null);
     });
     it('should throw', () => {
-      expect(
-        () =>
+      expect(() =>
         eInstanceNull('number', void 0, {
           allowNegative: true,
         })
