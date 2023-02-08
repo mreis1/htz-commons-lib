@@ -51,12 +51,13 @@ export interface EnsureValidStringOpts {
   transform?: 'none' | 'upperCase' | 'lowerCase';
 }
 
-export function ensureValidString(str: string, options: EnsureValidStringOpts)
-export function ensureValidString(str: string, defaultValue, options: Omit<EnsureValidStringOpts, 'defaultValue'>)
+export function ensureValidString(str: string, options: EnsureValidStringOpts);
 export function ensureValidString(
   str: string,
-  ...args
-) {
+  defaultValue,
+  options: Omit<EnsureValidStringOpts, 'defaultValue'>
+);
+export function ensureValidString(str: string, ...args) {
   /*
   const t = typeof defaultValueOrOptions;
   const tIsObj = isObject(defaultValueOrOptions);

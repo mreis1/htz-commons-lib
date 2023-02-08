@@ -1,4 +1,6 @@
-type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[] ? ElementType : never;
+type ArrElement<ArrType> = ArrType extends readonly (infer ElementType)[]
+  ? ElementType
+  : never;
 
 // type Keys<TypeOf> = keyof ArrElement<TypeOf>;
 
@@ -8,10 +10,10 @@ type FilterByFn<T> = <R>(value: ArrElement<T>, idx: number) => Promise<R>;
 
 // await credits to: https://stackoverflow.com/a/57364353/1084568
 type Await<T> = T extends {
-     then(onfulfilled?: (value: infer U) => unknown): unknown;
+  then(onfulfilled?: (value: infer U) => unknown): unknown;
 }
-     ? U
-     : T;
+  ? U
+  : T;
 
 // declare `T` as being a any[]         T:any[] is our input data
 // Then we pass a callback function that returns a promise
@@ -28,17 +30,20 @@ type MapAsyncReturn<Y> = Await<ReturnType<Await<Y>>>[];
  * @param list
  * @param fn
  */
-export async function mapAsync<T extends any[], Y = FilterByFn<T>>(list: T, fn: Y): Promise<MapAsyncReturn<Y>> {
-     let output = [] as ReturnType<Y>[];
-     if (!Array.isArray(list)) {
-          throw new TypeError('mapAsync required an array');
-     }
-     if (typeof fn !== 'function') {
-          throw new TypeError('mapAsync required fn to be a function');
-     }
-     let idx = 0;
-     for (const r of list) {
-          output.push(await fn(r, idx++));
-     }
-     return output as any;
+export async function mapAsync<T extends any[], Y = FilterByFn<T>>(
+  list: T,
+  fn: Y
+): Promise<MapAsyncReturn<Y>> {
+  let output = [] as ReturnType<Y>[];
+  if (!Array.isArray(list)) {
+    throw new TypeError('mapAsync required an array');
+  }
+  if (typeof fn !== 'function') {
+    throw new TypeError('mapAsync required fn to be a function');
+  }
+  let idx = 0;
+  for (const r of list) {
+    output.push(await fn(r, idx++));
+  }
+  return output as any;
 }

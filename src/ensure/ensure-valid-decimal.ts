@@ -26,16 +26,13 @@ export interface EnsureDecimalOptionsWithDefault extends EnsureDecimalOptions {
 export function ensureValidDecimal(
   value: any,
   options?: EnsureDecimalOptionsWithDefault
-)
+);
 export function ensureValidDecimal(
   value: any,
   defaultValue?,
   options?: EnsureDecimalOptions
-)
-export function ensureValidDecimal(
-  value: any,
-  ...args
-) {
+);
+export function ensureValidDecimal(value: any, ...args) {
   const t = typeof value;
   let defaultValue, options;
   if (args.length === 1 && isObject(args[0])) {

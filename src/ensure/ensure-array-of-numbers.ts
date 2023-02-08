@@ -55,7 +55,9 @@ export type ArrayOfNumberOptions =
       decimals: false;
       intOptions?: EnsureValidNumberOptions;
     } & EnsureArrayOfNumberCommonOpts);
-export type ArrayOfNumberOptionsWithDefaults = ArrayOfNumberOptions & { defaultValue?: any };
+export type ArrayOfNumberOptionsWithDefaults = ArrayOfNumberOptions & {
+  defaultValue?: any;
+};
 /**
  * Takes an array and returns numeric entries.
  * For optionals

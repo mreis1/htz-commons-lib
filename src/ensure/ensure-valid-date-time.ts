@@ -1,4 +1,8 @@
-import { createInstance, ensureValidDate, EnsureValidDateOpts } from './ensure-valid-date';
+import {
+  createInstance,
+  ensureValidDate,
+  EnsureValidDateOpts,
+} from './ensure-valid-date';
 
 /**
  *
@@ -17,4 +21,4 @@ export const ensureValidDateTimeStrict = createInstance({
   onInvalidStringFormat: 'defaultValue',
   inputFormat: 'YYYY-MM-DD HH:mm:ss',
   allowNull: false,
-})
+});
