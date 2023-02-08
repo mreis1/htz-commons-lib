@@ -1,4 +1,4 @@
-import { createInstance, ensure, EnsureOptions } from './ensure';
+import { createInstance, ensureX, EnsureOptions } from './ensure-x';
 
 describe('ensure', () => {
   describe('Generic Ensure', () => {
@@ -15,27 +15,27 @@ describe('ensure', () => {
     method === 'arrayOfNumbers'
     */
     it('#bool', () => {
-      expect(ensure('bool', void 0, { defaultValue: true })).toBe(true);
-      expect(ensure('bool', -1)).toBe(void 0);
-      expect(ensure('bool', null, { allowNull: true })).toBe(null);
+      expect(ensureX('bool', void 0, { defaultValue: true })).toBe(true);
+      expect(ensureX('bool', -1)).toBe(void 0);
+      expect(ensureX('bool', null, { allowNull: true })).toBe(null);
     });
     describe('#number', () => {
-      expect(ensure('number', -1.12, { allowNegative: true })).toBe(void 0);
-      expect(ensure('number', -1, { allowNegative: true })).toBe(-1);
-      expect(ensure('number', null, { allowNegative: true })).toBe(void 0);
+      expect(ensureX('number', -1.12, { allowNegative: true })).toBe(void 0);
+      expect(ensureX('number', -1, { allowNegative: true })).toBe(-1);
+      expect(ensureX('number', null, { allowNegative: true })).toBe(void 0);
       expect(
-        ensure('number', null, { allowNegative: true, allowNull: true })
+        ensureX('number', null, { allowNegative: true, allowNull: true })
       ).toBe(null);
-      expect(ensure('number', 0, { allowNegative: false })).toBe(0);
+      expect(ensureX('number', 0, { allowNegative: false })).toBe(0);
     });
     describe('#decimal', () => {
-      expect(ensure('decimal', -1.12, { allowNegative: true })).toBe(-1.12);
-      expect(ensure('decimal', -1.12, { allowNegative: false })).toBe(void 0);
-      expect(ensure('decimal', 0, { allowNegative: false })).toBe(0);
+      expect(ensureX('decimal', -1.12, { allowNegative: true })).toBe(-1.12);
+      expect(ensureX('decimal', -1.12, { allowNegative: false })).toBe(void 0);
+      expect(ensureX('decimal', 0, { allowNegative: false })).toBe(0);
     });
 
     describe('#date', () => {
-      expect(() => ensure('date', 'aaaa-01-01', { eMode: 'STRICT' })).toThrow();
+      expect(() => ensureX('date', 'aaaa-01-01', { eMode: 'STRICT' })).toThrow();
     });
   });
   describe('Custom instance not null', () => {

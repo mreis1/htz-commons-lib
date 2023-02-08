@@ -23,7 +23,7 @@ import {
   ensureArrayOfNumbers,
 } from './ensure-array-of-numbers';
 
-export enum EnsureMode {
+export enum ENSURE_MODE {
   /**
    * Assumed the field is required and expects a valid value to be provided
    */
@@ -40,8 +40,8 @@ export enum EnsureMode {
    */
   STRICT_IF_PROVIDED = 3,
 }
-export type Mode = keyof typeof EnsureMode;
-export enum Operations {
+export type Mode = keyof typeof ENSURE_MODE;
+export enum METHOD {
   arrayOf,
   arrayOfNumbers,
   bool,
@@ -53,14 +53,14 @@ export enum Operations {
   dateTime,
   timestamp,
 }
-export type Operation = keyof typeof Operations;
+export type Method = keyof typeof METHOD;
 
 type ArrayOfOptions = { validatorFn: ArrayOfValidatorFn };
 
 type ReturnType<T> = T extends (...args: any[]) => infer R ? R : any;
 
 // prettier-ignore
-export type Options<T extends Operation> =
+export type Options<T extends Method> =
     // Primitive types
     T extends 'bool' ? EnsureBooleanOptsWithDefault :
       T extends 'number' ? EnsureValidNumberOptions :
@@ -77,7 +77,7 @@ export type Options<T extends Operation> =
                           never;
 
 // prettier-ignore
-export type OperationOutput<T extends Operation> =
+export type OperationOutput<T extends Method> =
     // Primitive types
     T extends 'bool' ? ReturnType<typeof ensureBoolean> :
       T extends 'number' ? ReturnType<typeof ensureValidNumber> :
@@ -93,7 +93,7 @@ export type OperationOutput<T extends Operation> =
                       T extends 'arrayOfNumbers' ? ReturnType<typeof ensureArrayOfNumbers> :
                         never;
 
-export interface EnsureResultBase<T extends Operation> {
+export interface EnsureResultBase<T extends Method> {
   // initialValue
   iValue: any;
   // currentValue
@@ -101,7 +101,7 @@ export interface EnsureResultBase<T extends Operation> {
 }
 
 // prettier-ignore
-export type EnsureResult<T extends Operation> = {
+export type EnsureResult<T extends Method> = {
     // initialValue
     iValue: any;
     // currentValue
@@ -111,13 +111,13 @@ export type EnsureResult<T extends Operation> = {
   }
 
 // prettier-ignore
-export type EnsureOutput<T extends Operation, Y extends boolean = true> = 
+export type EnsureOutput<T extends Method, Y extends boolean = true> =
   Y extends true ? EnsureResult<T> : 
     Y extends false ? OperationOutput<T> : 
       never;
 
 export interface ErrorBuilderOptions {
-  method: Operation;
+  method: Method;
   errorMsg: string;
   errorCode: ERROR_CODE;
   options: EnsureOptions<any>;
@@ -135,7 +135,7 @@ export interface EnsureInstanceOptions {
 }
 
 export type EnsureOptions<
-  T extends Operation,
+  T extends Method,
   Y extends boolean = true
 > = Options<T> &
   EnsureInstanceOptions & {
@@ -148,12 +148,12 @@ export type EnsureOptions<
 
 export function createInstance(opts: EnsureInstanceOptions) {
   const _opts = opts;
-  return function <T extends Operation, Y extends boolean>(
+  return function <T extends Method, Y extends boolean>(
     method: T,
     value: any,
     options?: Omit<EnsureOptions<T>, 'eMode' | 'errorBuilder' | 'allowNull'>
   ): EnsureOutput<T, Y> {
-    return ensure(method, value, {
+    return ensureX(method, value, {
       ...options,
       eMode: _opts.eMode,
       allowNull: _opts.allowNull,
@@ -168,7 +168,7 @@ export enum ERROR_CODE {
 }
 
 // mode: E, private method: Operation, value: string, options: any
-export function ensure<T extends Operation, Y extends boolean>(
+export function ensureX<T extends Method, Y extends boolean>(
   method: T,
   value: any,
   options?: EnsureOptions<T>
