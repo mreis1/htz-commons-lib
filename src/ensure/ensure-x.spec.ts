@@ -1,6 +1,10 @@
 import { createInstance, ensureX, EnsureOptions } from './ensure-x';
 
 describe('ensure', () => {
+  const eStrict = createInstance({
+    eMode: 'strict',
+    allowNull: false,
+  });
   describe('Generic Ensure', () => {
     /*
     method === 'bool'
@@ -110,4 +114,9 @@ describe('ensure', () => {
       ).toThrow();
     });
   });
+  describe('eStrict', () => {
+    expect(eStrict('bool', true, { eField: 'bar' })).toBe(true);
+    expect(()=>eStrict('bool', void 0, { eField: 'bar' })).toThrow(/bar is not a valid/)
+
+  })
 });

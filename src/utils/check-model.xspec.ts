@@ -176,6 +176,22 @@ describe('checkModel', () => {
           }
         ).strUpperTrim
       ).toBe('Foo');
+
+
+      //region Bool
+      expect(
+        o(
+          {
+            foo: true,
+          },
+          {
+            foo: option('bool', {
+              mode: 'strict'
+            }),
+          }
+        ).foo
+      ).toBe(true);
+      //endregion
     });
   });
 });
