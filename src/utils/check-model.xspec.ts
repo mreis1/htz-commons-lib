@@ -67,6 +67,121 @@ describe('checkModel', () => {
           }
         )
       ).toThrow(/Field dog has incorrect value/);
+
+
+      expect(() =>
+        o(
+          {
+            email: 'te2'
+          },
+          {
+            email: option('email', {
+              mode: 'strict',
+              // type: 'string',
+              allowNull: true,
+              options: {
+                // defaultValue: null,
+                // maxLength: 2,
+              },
+            })
+          }
+        )
+      ).toThrow(/Field email has incorrect value/)
+
+
+      expect(o(
+        {
+          email: 'TEST2@foo.bar'
+        },
+        {
+          email: option('email', {
+            mode: 'strict',
+            allowNull: true,
+            options: {
+
+            }
+          })
+        }
+      ).email).toBe('test2@foo.bar')
+
+
+      expect(o(
+        {
+          strUpperTrim: ' foo '
+        },
+        {
+          strUpperTrim: option('string+upper+trim', {
+            mode: 'strict',
+            allowNull: true,
+            options: {
+
+            }
+          })
+        }
+      ).strUpperTrim).toBe('FOO')
+
+
+      expect(o(
+        {
+          strUpperTrim: ' FOO '
+        },
+        {
+          strUpperTrim: option('string+lower+trim', {
+            mode: 'strict',
+            allowNull: true,
+            options: {
+
+            }
+          })
+        }
+      ).strUpperTrim).toBe('foo')
+
+      expect(o(
+        {
+          strUpperTrim: ' FOO '
+        },
+        {
+          strUpperTrim: option('string+lower', {
+            mode: 'strict',
+            allowNull: true,
+            options: {
+
+            }
+          })
+        }
+      ).strUpperTrim).toBe(' foo ')
+
+      expect(o(
+        {
+          strUpperTrim: ' foo '
+        },
+        {
+          strUpperTrim: option('string+upper', {
+            mode: 'strict',
+            allowNull: true,
+            options: {
+
+            }
+          })
+        }
+      ).strUpperTrim).toBe(' FOO ')
+
+
+      expect(o(
+        {
+          strUpperTrim: ' Foo '
+        },
+        {
+          strUpperTrim: option('string+trim', {
+            mode: 'strict',
+            allowNull: true,
+            options: {
+
+            }
+          })
+        }
+      ).strUpperTrim).toBe('Foo')
+
     });
   });
 });

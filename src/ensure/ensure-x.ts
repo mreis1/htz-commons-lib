@@ -10,6 +10,7 @@ import {
 import {
   EnsureValidDateOpts,
   ensureValidDateStrict,
+  ensureValidEmail,
   ensureValidNumber,
   EnsureValidNumberOptions,
   ensureValidString,
@@ -52,6 +53,13 @@ export enum METHOD {
   date,
   dateTime,
   timestamp,
+  // string variants
+  'string+upper+trim',
+  'string+lower+trim',
+  'string+lower',
+  'string+upper',
+  'string+trim',
+  'email', // Automatically trims and lowercase the string and verifies if it matches an email regexp
 }
 export type Method = keyof typeof METHOD;
 
@@ -66,15 +74,22 @@ export type Options<T extends Method> =
       T extends 'number' ? EnsureValidNumberOptions :
         T extends 'decimal' ? EnsureDecimalOptions :
           T extends 'string' ? EnsureValidStringOpts :
+            // String variants
+            T extends 'string+lower' ? Omit<EnsureValidStringOpts,'transform'> :
+              T extends 'string+lower+trim' ? Omit<EnsureValidStringOpts,'transform'|'trim'>:
+                T extends 'string+upper' ? Omit<EnsureValidStringOpts,'transform'>:
+                  T extends 'string+upper+trim' ? Omit<EnsureValidStringOpts,'transform'|'trim'>:
+                    T extends 'string+trim' ? Omit<EnsureValidStringOpts,'trim'>:
+                      T extends 'email' ? EnsureValidStringOpts:
             // Date & Time functions
             T extends 'date' ? EnsureValidDateOpts :
               T extends 'dateTime' ? EnsureValidDateOpts :
                 T extends 'timestamp' ?  EnsureValidDateOpts :
                   T extends 'time' ? EnsureValidTimeOptions :
-                    // Arrays
-                      T extends 'arrayOf' ? { validatorFn: ArrayOfValidatorFn } :
-                        T extends 'arrayOfNumbers' ? ArrayOfNumberOptionsWithDefaults :
-                          never;
+            // Arrays
+              T extends 'arrayOf' ? { validatorFn: ArrayOfValidatorFn } :
+                T extends 'arrayOfNumbers' ? ArrayOfNumberOptionsWithDefaults :
+                  never;
 
 // prettier-ignore
 export type OperationOutput<T extends Method> =
@@ -83,22 +98,29 @@ export type OperationOutput<T extends Method> =
       T extends 'number' ? ReturnType<typeof ensureValidNumber> :
         T extends 'decimal' ? ReturnType<typeof ensureValidDecimal> :
           T extends 'string' ? ReturnType<typeof ensureValidString>:
+            // String variants
+            T extends 'string+lower' ? ReturnType<typeof ensureValidString>:
+              T extends 'string+lower+trim' ? ReturnType<typeof ensureValidString>:
+                T extends 'string+upper' ? ReturnType<typeof ensureValidString>:
+                  T extends 'string+upper+trim' ? ReturnType<typeof ensureValidString>:
+                    T extends 'string+trim' ? ReturnType<typeof ensureValidString>:
+                      T extends 'email' ? ReturnType<typeof ensureValidString>:
             // Date & Time functions
             T extends 'date' ? ReturnType<typeof ensureValidDateStrict>:
               T extends 'dateTime' ? ReturnType<typeof ensureValidDateTimeStrict>:
                 T extends 'timestamp' ?  ReturnType<typeof ensureValidTimestampStrict> :
                   T extends 'time' ? ReturnType<typeof ensureValidTime> :
-                    // Arrays
-                    T extends 'arrayOf' ? ReturnType<typeof ensureArrayOfNumbers> :
-                      T extends 'arrayOfNumbers' ? ReturnType<typeof ensureArrayOfNumbers> :
-                        never;
+            // Arrays
+            T extends 'arrayOf' ? ReturnType<typeof ensureArrayOfNumbers> :
+              T extends 'arrayOfNumbers' ? ReturnType<typeof ensureArrayOfNumbers> :
+                never;
 
-export interface EnsureResultBase<T extends Method> {
-  // initialValue
-  iValue: any;
-  // currentValue
-  cValue: OperationOutput<T>;
-}
+// export interface EnsureResultBase<T extends Method> {
+//   // initialValue
+//   iValue: any;
+//   // currentValue
+//   cValue: OperationOutput<T>;
+// }
 
 // prettier-ignore
 export type EnsureResult<T extends Method> = {
@@ -166,7 +188,15 @@ export enum ERROR_CODE {
   MISSING_REQUIRED_FIELD = 'MISSING_REQUIRED_FIELD',
   INVALID_VALUE = 'INVALID_VALUE',
 }
-
+const stringMethods: Method[] = [
+  'string',
+  'string+lower',
+  'string+lower+trim',
+  'string+upper',
+  'string+upper+trim',
+  'string+trim',
+  'email',
+];
 // mode: E, private method: Operation, value: string, options: any
 export function ensureX<T extends Method, Y extends boolean>(
   method: T,
@@ -199,8 +229,33 @@ export function ensureX<T extends Method, Y extends boolean>(
       output = ensureValidNumber(value, options);
     } else if (method === 'decimal') {
       output = ensureValidDecimal(value, options);
-    } else if (method === 'string') {
-      output = ensureValidString(value, options as EnsureValidStringOpts);
+    } else if (stringMethods.includes(method)) {
+      const parts = method.split('+');
+      const opts = options as Options<'string'>;
+      if (method === 'email') {
+        // sanitize
+        opts.trim = true;
+        opts.transform = 'lowerCase';
+      } else {
+        if (parts.length > 1) {
+          if (parts.includes('trim')) {
+            opts.trim = true;
+          }
+          if (parts.includes('lower')) {
+            opts.transform = 'lowerCase';
+          } else if (parts.includes('upper')) {
+            opts.transform = 'upperCase';
+          }
+        }
+      }
+      output = ensureValidString(value, opts);
+      if (method === 'email') {
+        if (output !== void 0) {
+          output = ensureValidEmail(output, {
+            allowNull: opts.allowNull,
+          });
+        }
+      }
     } else if (method === 'time') {
       output = ensureValidTime(value, options);
     } else if (method === 'date') {
