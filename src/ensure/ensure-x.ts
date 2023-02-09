@@ -27,18 +27,18 @@ export enum ENSURE_MODE {
   /**
    * Assumed the field is required and expects a valid value to be provided
    */
-  STRICT = 1,
+  strict = 1,
   /**
    * Assumed field is not essential,
    * if an invalid value is provided it will silently default to the
    * defaultValue
    */
-  SOFT = 2,
+  soft = 2,
   /**
    * Assumes value is not required but if it was provided,
    * then a valid value is necessary otherwise and exception will be produced.
    */
-  STRICT_IF_PROVIDED = 3,
+  strict_if_provided = 3,
 }
 export type Mode = keyof typeof ENSURE_MODE;
 export enum METHOD {
@@ -239,8 +239,8 @@ export function ensureX<T extends Method, Y extends boolean>(
   };
   const errRes = getError(valueIsSet);
   if (
-    (mode === 'STRICT' && output === void 0) ||
-    (mode === 'STRICT_IF_PROVIDED' && valueIsSet && output === void 0)
+    (mode === 'strict' && output === void 0) ||
+    (mode === 'strict_if_provided' && valueIsSet && output === void 0)
   ) {
     if (typeof options.errorBuilder === 'function') {
       throw options.errorBuilder({

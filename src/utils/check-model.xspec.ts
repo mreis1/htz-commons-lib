@@ -26,7 +26,7 @@ describe('checkModel', () => {
         },
         {
           dog: option('string', {
-            mode: 'SOFT',
+            mode: 'soft',
             // type: 'string',
             allowNull: true,
             options: {
@@ -49,7 +49,7 @@ describe('checkModel', () => {
           },
           {
             dog: option('string', {
-              mode: 'STRICT',
+              mode: 'strict',
               // type: 'string',
               allowNull: true,
               options: {
@@ -58,7 +58,7 @@ describe('checkModel', () => {
               },
             }),
             age: option('number', {
-              mode: 'SOFT',
+              mode: 'soft',
               options: {
                 allowNegative: true,
               },

@@ -10,9 +10,11 @@ export interface PropOption<T extends Method> {
   value: any;
   type: T;
   mode: Mode;
-  allowNull: boolean;
-  // key: Operation;
-  options: Omit<
+  /**
+   * @default false
+   */
+  allowNull?: boolean;
+  options?: Omit<
     EnsureOptions<T, false>,
     'errorBuilder' | 'eMode' | 'eField' | 'allowNull' | 'eReturnObject'
   >;
@@ -20,12 +22,14 @@ export interface PropOption<T extends Method> {
 
 export type ModelOption<T> = Record<keyof T, Omit<PropOption<any>, 'value'>>;
 
+
 export function option<T extends Method>(
   method: T,
   options: Omit<PropOption<T>, 'type' | 'value'>
 ): PropOption<T> {
+  options.options = options.options || {} as any;
   return {
-    ...options,
+    ...(options as PropOption<T>),
     value: void 0,
     type: method,
   };

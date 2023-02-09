@@ -36,7 +36,7 @@ describe('ensure', () => {
 
     describe('#date', () => {
       expect(() =>
-        ensureX('date', 'aaaa-01-01', { eMode: 'STRICT' })
+        ensureX('date', 'aaaa-01-01', { eMode: 'strict' })
       ).toThrow();
     });
   });
@@ -49,7 +49,7 @@ describe('ensure', () => {
       }
     }
     let eInstanceNotNull = createInstance({
-      eMode: 'STRICT',
+      eMode: 'strict',
       errorBuilder: (options) => {
         const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
         return new CustomError(x);
@@ -88,7 +88,7 @@ describe('ensure', () => {
       }
     }
     let eInstanceNull = createInstance({
-      eMode: 'STRICT',
+      eMode: 'strict',
       allowNull: true,
       errorBuilder: (options) => {
         const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
