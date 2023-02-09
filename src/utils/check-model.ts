@@ -22,12 +22,11 @@ export interface PropOption<T extends Method> {
 
 export type ModelOption<T> = Record<keyof T, Omit<PropOption<any>, 'value'>>;
 
-
 export function option<T extends Method>(
   method: T,
   options: Omit<PropOption<T>, 'type' | 'value'>
 ): PropOption<T> {
-  options.options = options.options || {} as any;
+  options.options = options.options || ({} as any);
   return {
     ...(options as PropOption<T>),
     value: void 0,
