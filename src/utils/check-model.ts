@@ -43,18 +43,46 @@ export interface CheckOptions {
   errorBuilder: EnsureInstanceOptions['errorBuilder'];
 }
 
-export interface InstanceOptions extends Partial<CheckOptions> {}
+export interface InstanceOptions<T extends boolean>
+  extends Partial<CheckOptions> {
+  /**
+   * @default: false
+   */
+  async?: T;
+}
+export type InstanceOutput<
+  T extends boolean,
+  Y extends {} = any
+> = T extends true ? Promise<Y> : Y;
 
-export function createInstance(options: InstanceOptions) {
+export function createInstance<Z extends boolean = false>(
+  options: InstanceOptions<Z>
+) {
+  let async = options.async;
+  options.async = void 0;
   return function <T extends {}, Y extends ModelOption<T>>(
     model: T,
     data: Y,
     options2?: Partial<CheckOptions>
-  ) {
-    return checkModel(model, data, {
-      ...options,
-      ...options2,
-    });
+  ): InstanceOutput<Z, T> {
+    if (async) {
+      return <any>new Promise((resolve, reject) => {
+        try {
+          const o = checkModel(model, data, {
+            ...options,
+            ...options2,
+          });
+          resolve(o);
+        } catch (err) {
+          reject(err);
+        }
+      });
+    } else {
+      return <any>checkModel(model, data, {
+        ...options,
+        ...options2,
+      });
+    }
   };
 }
 

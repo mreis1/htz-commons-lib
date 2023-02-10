@@ -1,14 +1,38 @@
 import { checkModel, createInstance, option } from './check-model';
+class CustomError extends Error {
+  constructor(...args) {
+    super(...args);
+    Object.setPrototypeOf(this, CustomError.prototype);
+  }
+}
 
 describe('checkModel', () => {
+  describe('CustomInstanceAsync', () => {
+    let o = createInstance({
+      async: true,
+      errorBuilder: (options) => {
+        const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
+        return new CustomError(x);
+      },
+    });
+    it('should test', async () => {
+      let x: any;
+      await o(
+        {
+          foo: ' AA ',
+        },
+        {
+          foo: option('string+upper+trim', {
+            mode: 'strict',
+            allowNull: true,
+          }),
+        }
+      ).then(data => x = data); // explictly using then to make sure i'm dealing with a promise.
+      expect(x.foo).toBe('AA');
+    });
+  });
   describe('CustomInstance', () => {
     it('Should work', () => {
-      class CustomError extends Error {
-        constructor(...args) {
-          super(...args);
-          Object.setPrototypeOf(this, CustomError.prototype);
-        }
-      }
       let o = createInstance({
         errorBuilder: (options) => {
           const x = `Field ${
@@ -177,7 +201,6 @@ describe('checkModel', () => {
         ).strUpperTrim
       ).toBe('Foo');
 
-
       //region Bool
       expect(
         o(
@@ -186,7 +209,7 @@ describe('checkModel', () => {
           },
           {
             foo: option('bool', {
-              mode: 'strict'
+              mode: 'strict',
             }),
           }
         ).foo
