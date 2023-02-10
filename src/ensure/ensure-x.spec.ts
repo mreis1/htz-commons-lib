@@ -111,13 +111,13 @@ describe('ensure', () => {
         eInstanceNull('number', void 0, {
           allowNegative: true,
         })
-      ).toThrow();
+      ).toThrow(/Field - has incorrect value/); // custom error
     });
   });
   describe('eStrict', () => {
     expect(eStrict('bool', true, { eField: 'bar' })).toBe(true);
     expect(() => eStrict('bool', void 0, { eField: 'bar' })).toThrow(
-      /bar is not a valid/
+      /Required field "bar" was not provided./
     );
   });
 });
