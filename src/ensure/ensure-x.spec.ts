@@ -116,7 +116,8 @@ describe('ensure', () => {
   });
   describe('eStrict', () => {
     expect(eStrict('bool', true, { eField: 'bar' })).toBe(true);
-    expect(()=>eStrict('bool', void 0, { eField: 'bar' })).toThrow(/bar is not a valid/)
-
-  })
+    expect(() => eStrict('bool', void 0, { eField: 'bar' })).toThrow(
+      /bar is not a valid/
+    );
+  });
 });

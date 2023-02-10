@@ -27,7 +27,7 @@ describe('checkModel', () => {
             allowNull: true,
           }),
         }
-      ).then(data => x = data); // explictly using then to make sure i'm dealing with a promise.
+      ).then((data) => (x = data)); // explictly using then to make sure i'm dealing with a promise.
       expect(x.foo).toBe('AA');
     });
   });
