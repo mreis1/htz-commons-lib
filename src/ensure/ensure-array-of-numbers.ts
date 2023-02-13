@@ -44,7 +44,7 @@ export type ArrayOfNumberOptions =
        * (default: false)
        * When true, values returned take in consideration the options defined by decimalOpts.
        */
-      decimals: true;
+      decimals?: true;
       decimalOpts?: EnsureDecimalOptions2;
     } & EnsureArrayOfNumberCommonOpts)
   | ({
@@ -52,7 +52,7 @@ export type ArrayOfNumberOptions =
        * (default: false)
        * When true, values returned take in consideration the options defined by decimalOpts.
        */
-      decimals: false;
+      decimals?: false;
       intOptions?: EnsureValidNumberOptions;
     } & EnsureArrayOfNumberCommonOpts);
 export type ArrayOfNumberOptionsWithDefaults = ArrayOfNumberOptions & {
