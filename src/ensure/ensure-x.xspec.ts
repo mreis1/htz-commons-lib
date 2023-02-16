@@ -89,6 +89,7 @@ describe('ensure', () => {
     });
   });
   describe('Custom instance null', () => {
+    // tslint:disable-next-line:max-classes-per-file
     class CustomError extends Error {
       constructor(...args) {
         super(...args);
