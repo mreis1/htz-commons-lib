@@ -125,11 +125,11 @@ describe('ensure', () => {
       expect(() => eStrict('bool', void 0, { eField: 'bar' })).toThrow(
         /Required field "bar" was not provided./
       );
-    })
+    });
   });
   describe('eStrictNull', () => {
     test('', () => {
       expect(eStrictNull('number', null, { eField: 'bar' })).toBe(null);
-    })
-  })
+    });
+  });
 });
