@@ -5,6 +5,10 @@ describe('ensure', () => {
     eMode: 'strict',
     allowNull: false,
   });
+  const eStrictNull = createInstance({
+    eMode: 'strict',
+    allowNull: true,
+  });
   describe('Generic Ensure', () => {
     /*
     method === 'bool'
@@ -115,9 +119,16 @@ describe('ensure', () => {
     });
   });
   describe('eStrict', () => {
-    expect(eStrict('bool', true, { eField: 'bar' })).toBe(true);
-    expect(() => eStrict('bool', void 0, { eField: 'bar' })).toThrow(
-      /Required field "bar" was not provided./
-    );
+    test('', () => {
+      expect(eStrict('bool', true, { eField: 'bar' })).toBe(true);
+      expect(() => eStrict('bool', void 0, { eField: 'bar' })).toThrow(
+        /Required field "bar" was not provided./
+      );
+    })
   });
+  describe('eStrictNull', () => {
+    test('', () => {
+      expect(eStrictNull('number', null, { eField: 'bar' })).toBe(null);
+    })
+  })
 });
