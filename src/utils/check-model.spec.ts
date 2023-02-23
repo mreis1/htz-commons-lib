@@ -34,9 +34,7 @@ describe('checkModel', () => {
   describe('CustomInstance', () => {
     let o = createInstance({
       errorBuilder: (options) => {
-        const x = `Field ${
-          options.options.eField ?? '-'
-        } has incorrect value`;
+        const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
         return new CustomError(x);
       },
     });
@@ -224,24 +222,24 @@ describe('checkModel', () => {
               foo: null,
               bar: null,
               nullToNum: null,
-              nullToStr: null
+              nullToStr: null,
             },
             {
               foo: option('bool', {
                 mode: 'strict',
-                nullTo: void 0
+                nullTo: void 0,
               }),
               bar: option('bool', {
                 mode: 'strict',
-                nullTo: null
+                nullTo: null,
               }),
               nullToNum: option('bool', {
                 mode: 'strict',
-                nullTo: 1
+                nullTo: 1,
               }),
               nullToStr: option('string', {
                 mode: 'strict',
-                nullTo: 'x'
+                nullTo: 'x',
               }),
             }
           );
@@ -250,9 +248,8 @@ describe('checkModel', () => {
           expect(x.bar).toBe(null);
           expect(x.nullToNum).toBe(1);
           expect(x.nullToStr).toBe('x');
-
         }
-      })
-    })
+      });
+    });
   });
 });

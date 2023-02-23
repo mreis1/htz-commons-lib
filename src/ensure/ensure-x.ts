@@ -305,9 +305,8 @@ export function ensureX<T extends Method, Y extends boolean>(
   if (verifyOutput) {
     const errRes = getError(valueIsSet);
     if (
-
-        (mode === 'strict' && output === void 0) ||
-        (mode === 'strict_if_provided' && valueIsSet && output === void 0)
+      (mode === 'strict' && output === void 0) ||
+      (mode === 'strict_if_provided' && valueIsSet && output === void 0)
     ) {
       if (typeof options.errorBuilder === 'function') {
         throw options.errorBuilder({

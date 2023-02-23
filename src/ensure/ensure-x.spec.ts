@@ -67,15 +67,15 @@ describe('ensure', () => {
     it('cast null values to something else', () => {
       expect(
         eInstanceNotNull('number', null, {
-          nullTo: 'a'
+          nullTo: 'a',
         })
       ).toBe('a');
       expect(
         eInstanceNotNull('number', null, {
-          nullTo: void 0
+          nullTo: void 0,
         })
       ).toBe(void 0);
-    })
+    });
 
     it('should throw', () => {
       expect(
