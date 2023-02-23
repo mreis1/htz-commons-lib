@@ -63,6 +63,20 @@ describe('ensure', () => {
         return new CustomError(x);
       },
     });
+
+    it('cast null values to something else', () => {
+      expect(
+        eInstanceNotNull('number', null, {
+          nullTo: 'a'
+        })
+      ).toBe('a');
+      expect(
+        eInstanceNotNull('number', null, {
+          nullTo: void 0
+        })
+      ).toBe(void 0);
+    })
+
     it('should throw', () => {
       expect(
         eInstanceNotNull('number', 0, {

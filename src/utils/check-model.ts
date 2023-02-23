@@ -14,6 +14,15 @@ export interface PropOption<T extends Method> {
    * @default false
    */
   allowNull?: boolean;
+  /**
+   * Careful: This property shall not be provided unless you want the provided value to
+   * be used once a null is presented as a input value.
+   *
+   * `void 0 aka undefined` are considered to be valid values for nullTo.
+   *
+   * So simply omit the property.
+   */
+  nullTo?: any;
   options?: Omit<
     EnsureOptions<T, false>,
     'errorBuilder' | 'eMode' | 'eField' | 'allowNull' | 'eReturnObject'
@@ -96,13 +105,17 @@ export function checkModel<T extends {}>(
   Object.keys(model).forEach((key) => {
     if (data[key] !== void 0) {
       const o: PropOption<any> = data[key];
-      result[key] = ensureX(o.type, model[key], {
+      let opts = {
         ...o.options,
         eMode: o.mode,
         eField: key,
         allowNull: o.allowNull,
         errorBuilder: options.errorBuilder,
-      });
+      };
+      if ('nullTo' in o) {
+        opts.nullTo = o.nullTo;
+      }
+      result[key] = ensureX(o.type, model[key], opts);
     }
   });
   return result;

@@ -166,6 +166,7 @@ export type EnsureOptions<
     eReturnObject?: Y;
     defaultValue?: any;
     allowNull?: boolean;
+    nullTo?: any;
   };
 
 export function createInstance(opts: EnsureInstanceOptions) {
@@ -220,8 +221,13 @@ export function ensureX<T extends Method, Y extends boolean>(
   let valueIsSet = value !== void 0;
   let valueIsNull = value === null;
   let output: any;
-  if (options.allowNull && valueIsNull) {
+  let verifyOutput = true;
+  if (valueIsNull && 'nullTo' in options) {
+    output = options.nullTo; // any value provided (undefined, null, 0, will be accepted)
+    verifyOutput = false;
+  } else if (options.allowNull && valueIsNull) {
     output = null;
+    verifyOutput = false;
   } else {
     if (method === 'bool') {
       output = ensureBoolean(value, options);
@@ -296,32 +302,37 @@ export function ensureX<T extends Method, Y extends boolean>(
       error,
     };
   };
-  const errRes = getError(valueIsSet);
-  if (
-    (mode === 'strict' && output === void 0) ||
-    (mode === 'strict_if_provided' && valueIsSet && output === void 0)
-  ) {
-    if (typeof options.errorBuilder === 'function') {
-      throw options.errorBuilder({
-        method,
-        errorMsg: errRes.msg,
-        errorCode: errRes.code,
-        options,
-      });
+  if (verifyOutput) {
+    const errRes = getError(valueIsSet);
+    if (
+
+        (mode === 'strict' && output === void 0) ||
+        (mode === 'strict_if_provided' && valueIsSet && output === void 0)
+    ) {
+      if (typeof options.errorBuilder === 'function') {
+        throw options.errorBuilder({
+          method,
+          errorMsg: errRes.msg,
+          errorCode: errRes.code,
+          options,
+        });
+      } else {
+        throw errRes.error;
+      }
     } else {
-      throw errRes.error;
+      let finalOutputValue = output === void 0 ? defaultValue : output;
+      if (options.eReturnObject === true) {
+        return <EnsureOutput<T, Y>>{
+          cValue: finalOutputValue,
+          iValue,
+          errorMsg: errRes.msg,
+          errorCode: errRes.code,
+        };
+      } else {
+        return finalOutputValue;
+      }
     }
   } else {
-    let finalOutputValue = output === void 0 ? defaultValue : output;
-    if (options.eReturnObject === true) {
-      return <EnsureOutput<T, Y>>{
-        cValue: finalOutputValue,
-        iValue,
-        errorMsg: errRes.msg,
-        errorCode: errRes.code,
-      };
-    } else {
-      return finalOutputValue;
-    }
+    return output;
   }
 }

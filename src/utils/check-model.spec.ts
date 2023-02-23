@@ -32,15 +32,15 @@ describe('checkModel', () => {
     });
   });
   describe('CustomInstance', () => {
+    let o = createInstance({
+      errorBuilder: (options) => {
+        const x = `Field ${
+          options.options.eField ?? '-'
+        } has incorrect value`;
+        return new CustomError(x);
+      },
+    });
     it('Should work', () => {
-      let o = createInstance({
-        errorBuilder: (options) => {
-          const x = `Field ${
-            options.options.eField ?? '-'
-          } has incorrect value`;
-          return new CustomError(x);
-        },
-      });
       // returns a list of properties with incorrect value
       // simple (@default) - Returns the sanitized model and throws on first error
       let oRes = o(
@@ -216,5 +216,43 @@ describe('checkModel', () => {
       ).toBe(true);
       //endregion
     });
+    describe('nullTo', () => {
+      it('Should cast null values into something else', () => {
+        {
+          let x = o(
+            {
+              foo: null,
+              bar: null,
+              nullToNum: null,
+              nullToStr: null
+            },
+            {
+              foo: option('bool', {
+                mode: 'strict',
+                nullTo: void 0
+              }),
+              bar: option('bool', {
+                mode: 'strict',
+                nullTo: null
+              }),
+              nullToNum: option('bool', {
+                mode: 'strict',
+                nullTo: 1
+              }),
+              nullToStr: option('string', {
+                mode: 'strict',
+                nullTo: 'x'
+              }),
+            }
+          );
+
+          expect(x.foo).toBe(void 0);
+          expect(x.bar).toBe(null);
+          expect(x.nullToNum).toBe(1);
+          expect(x.nullToStr).toBe('x');
+
+        }
+      })
+    })
   });
 });
