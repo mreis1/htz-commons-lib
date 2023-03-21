@@ -10,10 +10,24 @@ test('combineHex', () => {
       Buffer.from('test')
     ).toString('hex')
   ).toBe('68656c6c6fff10ff74657374');
+  expect(
+    combineHex(
+      [0xff],
+    ).toString('hex')
+  ).toBe('ff');
+
+  expect(
+    combineHex(
+      0xff,
+    ).toString('hex')
+  ).toBe('ff');
+
   expect(() =>
     combineHex(
       'hello', // Here we use a buffer
       Buffer.from('test')
     ).toString('hex')
   ).toThrow('Invalid input value');
+
+  expect(combineHex().toString('hex')).toBe('');
 });
