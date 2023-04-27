@@ -97,14 +97,14 @@ export function createInstance<Z extends boolean = false>(
 
 export function checkModel<T extends {}>(
   model: T,
-  data: ModelOption<T>,
+  modelDef: ModelOption<T>,
   options?: Partial<CheckOptions>
 ): T {
   let result = {} as any;
   options = options ?? {};
-  Object.keys(model).forEach((key) => {
-    if (data[key] !== void 0) {
-      const o: PropOption<any> = data[key];
+  Object.keys(modelDef).forEach((key) => {
+    if (modelDef[key] !== void 0) {
+      const o: PropOption<any> = modelDef[key];
       let opts = {
         ...o.options,
         eMode: o.mode,

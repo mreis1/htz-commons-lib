@@ -38,6 +38,72 @@ describe('checkModel', () => {
         return new CustomError(x);
       },
     });
+
+
+    it('should verify strict fields even if they are not provided in source payload', () => {
+      expect(() => {
+        try {
+          o(
+            {
+              age: 12 // <-- notice
+            },
+            {
+              dog: option('string', {
+                mode: 'strict'
+              }),
+              age: option('number', {
+                mode: 'strict'
+              }),
+            },
+            {}
+          );
+        } catch (err) {
+          console.log(err);
+          throw err;
+        }
+      }).toThrow();
+    });
+
+    it('should discard unknown payload properties or properties without definition', () => {
+      // # Test1
+      let r = o(
+        {
+          dog: 'my_dog_name',
+          age: 12 // <-- notice
+        },
+        {
+          dog: option('string', {
+            mode: 'strict'
+          }),
+          age: option('number', {
+            mode: 'strict'
+          }),
+        },
+        {}
+      );
+      expect(r.dog).toBe('my_dog_name');
+      expect(r.age).toBe(12);
+      // # Test2
+      r = o(
+        {
+          dog: null,
+          age: 12 // <-- notice
+        },
+        {
+          dog: option('string', {
+            mode: 'strict',
+            allowNull: true
+          }),
+          age: void 0
+        },
+        {}
+      );
+      expect(r.dog).toBe(null);
+      expect(r.age).toBe(void 0);
+      // # Test3
+    });
+
+
     it('Should work', () => {
       // returns a list of properties with incorrect value
       // simple (@default) - Returns the sanitized model and throws on first error
