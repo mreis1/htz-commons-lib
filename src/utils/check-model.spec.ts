@@ -39,20 +39,19 @@ describe('checkModel', () => {
       },
     });
 
-
     it('should verify strict fields even if they are not provided in source payload', () => {
       expect(() => {
         try {
           o(
             {
-              age: 12 // <-- notice
+              age: 12, // <-- notice
             },
             {
               dog: option('string', {
-                mode: 'strict'
+                mode: 'strict',
               }),
               age: option('number', {
-                mode: 'strict'
+                mode: 'strict',
               }),
             },
             {}
@@ -69,14 +68,14 @@ describe('checkModel', () => {
       let r = o(
         {
           dog: 'my_dog_name',
-          age: 12 // <-- notice
+          age: 12, // <-- notice
         },
         {
           dog: option('string', {
-            mode: 'strict'
+            mode: 'strict',
           }),
           age: option('number', {
-            mode: 'strict'
+            mode: 'strict',
           }),
         },
         {}
@@ -87,14 +86,14 @@ describe('checkModel', () => {
       r = o(
         {
           dog: null,
-          age: 12 // <-- notice
+          age: 12, // <-- notice
         },
         {
           dog: option('string', {
             mode: 'strict',
-            allowNull: true
+            allowNull: true,
           }),
-          age: void 0
+          age: void 0,
         },
         {}
       );
@@ -102,7 +101,6 @@ describe('checkModel', () => {
       expect(r.age).toBe(void 0);
       // # Test3
     });
-
 
     it('Should work', () => {
       // returns a list of properties with incorrect value
