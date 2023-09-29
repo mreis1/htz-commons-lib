@@ -271,7 +271,11 @@ export function ensureX<T extends Method, Y extends boolean>(
           }
         }
       }
-      output = ensureValidString(value, opts);
+      if (opts.allowNull && value === '') { /*Automatically cast empty string to null when null is accepted @todo: Add option to disable this behaviour*/
+        output = null;
+      } else {
+        output = ensureValidString(value, opts);
+      }
       if (method === 'email') {
         if (output !== void 0) {
           output = ensureValidEmail(output, {

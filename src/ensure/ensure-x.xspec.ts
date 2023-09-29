@@ -16,7 +16,7 @@ describe('ensure', () => {
   });
   const eProvidedStrictNull = createInstance({
     eMode: 'strict_if_provided',
-    allowNull: false,
+    allowNull: true,
   });
   describe('Generic Ensure', () => {
     /*
@@ -143,25 +143,67 @@ describe('ensure', () => {
     });
   });
 
+  describe('eProvidedStrictNull', () => {
+    test('string', () => {
+      expect(eProvidedStrictNull('string', '', { eField: 'bar' })).toBe(null);
+    });
+  });
 
   describe('eProvidedStrict', () => {
+    test('string', () => {
+      expect(() => eProvidedStrict('string', '', { eField: 'bar' })).toThrow(
+        /Provided value bar is not a valid \"string\"./
+      );
+    });
     test('arrayOfNumbers', () => {
-      expect(eProvidedStrict('arrayOfNumbers', void 0, { eField: 'bar' })).toBe(void 0);
-      expect(() => eProvidedStrict('arrayOfNumbers', null, { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);
-      expect(() => eProvidedStrict('arrayOfNumbers', ['a'], { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);
+      expect(eProvidedStrict('arrayOfNumbers', void 0, { eField: 'bar' })).toBe(
+        void 0
+      );
+      expect(() =>
+        eProvidedStrict('arrayOfNumbers', null, { eField: 'bar' })
+      ).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);
+      expect(() =>
+        eProvidedStrict('arrayOfNumbers', ['a'], { eField: 'bar' })
+      ).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);
     });
     test('arrayOf', () => {
-      expect(eProvidedStrict('arrayOf', void 0, { eField: 'bar', validatorFn: () => true })).toStrictEqual([]);
-      expect(eProvidedStrict('arrayOf', void 0, { eField: 'bar', validatorFn: () => false })).toStrictEqual([]);
-      expect(() => eProvidedStrict('arrayOf', null, { eField: 'bar', validatorFn: (v) => typeof v === 'string' })).toThrow(/Provided value bar is not a valid \"arrayOf\"./);
-      expect(eProvidedStrict('arrayOf', ['a'], { eField: 'bar', validatorFn: (v) => typeof v === 'string' })).toStrictEqual(['a']);
+      expect(
+        eProvidedStrict('arrayOf', void 0, {
+          eField: 'bar',
+          validatorFn: () => true,
+        })
+      ).toStrictEqual([]);
+      expect(
+        eProvidedStrict('arrayOf', void 0, {
+          eField: 'bar',
+          validatorFn: () => false,
+        })
+      ).toStrictEqual([]);
+      expect(() =>
+        eProvidedStrict('arrayOf', null, {
+          eField: 'bar',
+          validatorFn: (v) => typeof v === 'string',
+        })
+      ).toThrow(/Provided value bar is not a valid \"arrayOf\"./);
+      expect(
+        eProvidedStrict('arrayOf', ['a'], {
+          eField: 'bar',
+          validatorFn: (v) => typeof v === 'string',
+        })
+      ).toStrictEqual(['a']);
     });
   });
   describe('eStrict', () => {
     test('arrayOfNumbers', () => {
-      expect(eProvidedStrict('arrayOfNumbers', [1,2], { eField: 'bar' })).toEqual([1,2]);
-      expect(() => eStrict('arrayOfNumbers', void 0, { eField: 'bar' })).toThrow(/Required field "bar" was not provided\./);
-      expect(() => eStrict('arrayOfNumbers', [""], { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);
+      expect(
+        eProvidedStrict('arrayOfNumbers', [1, 2], { eField: 'bar' })
+      ).toEqual([1, 2]);
+      expect(() =>
+        eStrict('arrayOfNumbers', void 0, { eField: 'bar' })
+      ).toThrow(/Required field "bar" was not provided\./);
+      expect(() => eStrict('arrayOfNumbers', [''], { eField: 'bar' })).toThrow(
+        /Provided value bar is not a valid \"arrayOfNumbers\"./
+      );
     });
     test('arrayOf', () => {
       // @todo
@@ -170,15 +212,54 @@ describe('ensure', () => {
       expect(() => eStrict('arrayOfNumbers', [""], { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);*/
     });
 
+    test('string', () => {
+      expect(() => eStrict('string', '', { eField: 'bar' })).toThrow(
+        /Provided value bar is not a valid \"string\"./
+      );
+    });
     test('Date , DateTime, Timestmap and mixes', () => {
       // Pass
-      expect(moment.isMoment(eStrict('dateTime', '2022-02-10 10:00:00',{ eField: 'bar' }))).toBe(true)
-      expect(moment.isMoment(eStrict('date', '2022-02-10',{ eField: 'bar' }))).toBe(true)
-      expect(eStrict('time', '10:00:00',{ eField: 'bar' })).toStrictEqual({"h": 10, "m": 0, "s": 0, "sTime": 36000, "str": "10:00:00"})
-      expect(moment.isMoment(eStrict('dateTimeOrTimestamp', '2022-02-10 10:00:00',{ eField: 'bar' }))).toBe(true)
-      expect(moment.isMoment(eStrict('dateTimeOrTimestamp', '2022-02-10T10:00:00.000Z',{ eField: 'bar' }))).toBe(true)
-      expect(moment.isMoment(eStrict('dateOrTimestamp', '2022-02-10',{ eField: 'bar' }))).toBe(true)
-      expect(moment.isMoment(eStrict('dateOrTimestamp', '2022-02-10T10:00:00.000Z',{ eField: 'bar' }))).toBe(true)
+      expect(
+        moment.isMoment(
+          eStrict('dateTime', '2022-02-10 10:00:00', { eField: 'bar' })
+        )
+      ).toBe(true);
+      expect(
+        moment.isMoment(eStrict('date', '2022-02-10', { eField: 'bar' }))
+      ).toBe(true);
+      expect(eStrict('time', '10:00:00', { eField: 'bar' })).toStrictEqual({
+        h: 10,
+        m: 0,
+        s: 0,
+        sTime: 36000,
+        str: '10:00:00',
+      });
+      expect(
+        moment.isMoment(
+          eStrict('dateTimeOrTimestamp', '2022-02-10 10:00:00', {
+            eField: 'bar',
+          })
+        )
+      ).toBe(true);
+      expect(
+        moment.isMoment(
+          eStrict('dateTimeOrTimestamp', '2022-02-10T10:00:00.000Z', {
+            eField: 'bar',
+          })
+        )
+      ).toBe(true);
+      expect(
+        moment.isMoment(
+          eStrict('dateOrTimestamp', '2022-02-10', { eField: 'bar' })
+        )
+      ).toBe(true);
+      expect(
+        moment.isMoment(
+          eStrict('dateOrTimestamp', '2022-02-10T10:00:00.000Z', {
+            eField: 'bar',
+          })
+        )
+      ).toBe(true);
       // Throw
       // @todo
       /*expect(eProvidedStrict('arrayOfNumbers', [1,2], { eField: 'bar' })).toEqual([1,2]);
