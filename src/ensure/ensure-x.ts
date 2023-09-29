@@ -271,7 +271,8 @@ export function ensureX<T extends Method, Y extends boolean>(
           }
         }
       }
-      if (opts.allowNull && value === '') { /*Automatically cast empty string to null when null is accepted @todo: Add option to disable this behaviour*/
+      if (opts.allowNull && value === '') {
+        /*Automatically cast empty string to null when null is accepted @todo: Add option to disable this behaviour*/
         output = null;
       } else {
         output = ensureValidString(value, opts);
