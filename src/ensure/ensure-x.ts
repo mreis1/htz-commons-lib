@@ -52,6 +52,8 @@ export enum METHOD {
   time,
   date,
   dateTime,
+  dateOrTimestamp,
+  dateTimeOrTimestamp,
   timestamp,
   // string variants
   'string+upper+trim',
@@ -83,9 +85,11 @@ export type Options<T extends Method> =
                       T extends 'email' ? EnsureValidStringOpts:
             // Date & Time functions
             T extends 'date' ? EnsureValidDateOpts :
-              T extends 'dateTime' ? EnsureValidDateOpts :
-                T extends 'timestamp' ?  EnsureValidDateOpts :
-                  T extends 'time' ? EnsureValidTimeOptions :
+              T extends 'dateOrTimestamp' ? EnsureValidDateOpts :
+                T extends 'dateTime' ? EnsureValidDateOpts :
+                  T extends 'dateTimeOrTimestamp' ? EnsureValidDateOpts :
+                    T extends 'timestamp' ?  EnsureValidDateOpts :
+                      T extends 'time' ? EnsureValidTimeOptions :
             // Arrays
               T extends 'arrayOf' ? { validatorFn: ArrayOfValidatorFn } :
                 T extends 'arrayOfNumbers' ? ArrayOfNumberOptionsWithDefaults :
@@ -107,9 +111,12 @@ export type OperationOutput<T extends Method> =
                       T extends 'email' ? ReturnType<typeof ensureValidString>:
             // Date & Time functions
             T extends 'date' ? ReturnType<typeof ensureValidDateStrict>:
-              T extends 'dateTime' ? ReturnType<typeof ensureValidDateTimeStrict>:
-                T extends 'timestamp' ?  ReturnType<typeof ensureValidTimestampStrict> :
-                  T extends 'time' ? ReturnType<typeof ensureValidTime> :
+              T extends 'dateOrTimestamp' ? ReturnType<typeof ensureValidDateStrict>:
+                T extends 'dateTime' ? ReturnType<typeof ensureValidDateTimeStrict>:
+                  T extends 'dateTimeOrTimestamp' ? ReturnType<typeof ensureValidDateTimeStrict>:
+                    T extends 'timestamp' ?  ReturnType<typeof ensureValidTimestampStrict> :
+                      T extends 'timestamp' ?  ReturnType<typeof ensureValidTimestampStrict> :
+                        T extends 'time' ? ReturnType<typeof ensureValidTime> :
             // Arrays
             T extends 'arrayOf' ? ReturnType<typeof ensureArrayOfNumbers> :
               T extends 'arrayOfNumbers' ? ReturnType<typeof ensureArrayOfNumbers> :
@@ -198,6 +205,16 @@ const stringMethods: Method[] = [
   'string+trim',
   'email',
 ];
+
+function isDateTime(str: string) {
+  const isoDateTimeRegex = /^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}(?::\d{2})?)$/;
+  return isoDateTimeRegex.test(str);
+}
+function isDate(str: string) {
+  const isoDateTimeRegex = /^(\d{4}-\d{2}-\d{2})$/;
+  return isoDateTimeRegex.test(str);
+}
+
 // mode: E, private method: Operation, value: string, options: any
 export function ensureX<T extends Method, Y extends boolean>(
   method: T,
@@ -270,6 +287,21 @@ export function ensureX<T extends Method, Y extends boolean>(
       output = ensureValidDateTimeStrict(value, options);
     } else if (method === 'timestamp') {
       output = ensureValidTimestampStrict(value, options);
+    } else if (
+      method === 'dateOrTimestamp' ||
+      method === 'dateTimeOrTimestamp'
+    ) {
+      if (typeof value === 'string') {
+        if (isDateTime(value)) {
+          output = ensureValidDateTimeStrict(value, options);
+        } else if (isDate(value)) {
+          output = ensureValidDateStrict(value, options);
+        } else {
+          output = ensureValidTimestampStrict(value, options);
+        }
+      } else {
+        output = ensureValidTimestampStrict(value, options);
+      }
     } else if (method === 'arrayOf') {
       output = ensureArrayOf(
         value,
@@ -307,6 +339,21 @@ export function ensureX<T extends Method, Y extends boolean>(
     if (
       (mode === 'strict' && output === void 0) ||
       (mode === 'strict_if_provided' && valueIsSet && output === void 0)
+    ) {
+      if (typeof options.errorBuilder === 'function') {
+        throw options.errorBuilder({
+          method,
+          errorMsg: errRes.msg,
+          errorCode: errRes.code,
+          options,
+        });
+      } else {
+        throw errRes.error;
+      }
+    } else if (
+      (mode === 'strict' || (mode === 'strict_if_provided' && valueIsSet)) &&
+      (method === 'arrayOf' || method === 'arrayOfNumbers') &&
+      output?.length !== value?.length
     ) {
       if (typeof options.errorBuilder === 'function') {
         throw options.errorBuilder({

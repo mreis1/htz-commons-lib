@@ -111,6 +111,11 @@ describe('#ensureArrayOfNumbers', () => {
         });
         expect(d).toHaveLength(4);
       });
+
+      it('Test#6 (Basic)', () => {
+        let d = ensureArrayOfNumbers([1007], []);
+        expect(d).toHaveLength(1);
+      });
     });
   });
 });
