@@ -58,6 +58,7 @@ export class SqlSortBuilder {
     SqlSortBuilder.splitStr(str, []).forEach((i) => {
       if (typeof i === 'string') {
         let parts = i.split(':');
+        parts[1] = parts[1]?.toUpperCase();
         let targetI = arr.findIndex((arrV) => arrV === parts[0]);
         let convertedValue = this.acceptedValues[targetI];
         if (convertedValue) {
