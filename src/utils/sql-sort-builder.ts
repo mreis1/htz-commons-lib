@@ -112,8 +112,8 @@ export class SqlSortBuilder {
         let parts = _isArray ? prop : prop.split(':'); // Parse string of format: PROP:ORDER
         const o: string = parts[0];
         let order: SortOrder = SqlSortBuilder.ensureSortOrder(
-          parts[1],
-          SqlSortBuilder.ensureSortOrder(options?.order, this.defaultSortOrder)
+          parts[1]?.toUpperCase(),
+          SqlSortBuilder.ensureSortOrder(options?.order?.toUpperCase(), this.defaultSortOrder)
         );
         if (this.isValid(o).valid) {
           sortBy.push(o);
