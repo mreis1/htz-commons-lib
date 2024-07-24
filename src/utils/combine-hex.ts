@@ -8,45 +8,45 @@
  */
 export function combineHex(...args) {
   const arr = [];
-  args.forEach(value => {
+  args.forEach((value) => {
     if (value !== void 0 && value != null) {
       const isBuffer = Buffer.isBuffer(value) || value instanceof Buffer;
       const isArray = Array.isArray(value);
       const tOfValue = typeof value;
       if (!isBuffer && !isArray) {
         if (tOfValue !== 'number') {
-          throw new TypeError(`Invalid input value. Expected number, array or buffer but got ${typeof value}`)
+          throw new TypeError(
+            `Invalid input value. Expected number, array or buffer but got ${typeof value}`
+          );
         }
       }
-      const value2 = []
+      const value2 = [];
       if (isBuffer) {
         value2.push(...value);
-      } else if (isArray) /*Array validation */ {
-        const data = []
-        value.forEach(item => {
+      } else if (isArray) {
+        /*Array validation */ const data = [];
+        value.forEach((item) => {
           if (Array.isArray(item)) {
-            if (item.filter(v => typeof v !== 'number').length) {
+            if (item.filter((v) => typeof v !== 'number').length) {
               throw new TypeError('Invalid array');
             } else {
               data.push(...item);
             }
           } else if (Buffer.isBuffer(item)) {
-            data.push(...item)
+            data.push(...item);
           } else {
-            data.push(item)
+            data.push(item);
           }
-        })
-        value2.push(...data)
+        });
+        value2.push(...data);
       } else {
         value2.push(value);
       }
 
       arr.push.apply(arr, value2);
-    }
-    else {
+    } else {
       throw new Error('Invalid input value');
     }
   });
   return Buffer.from(arr);
 }
-

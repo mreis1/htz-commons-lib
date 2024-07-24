@@ -113,7 +113,10 @@ export class SqlSortBuilder {
         const o: string = parts[0];
         const order: SortOrder = SqlSortBuilder.ensureSortOrder(
           parts[1]?.toUpperCase(),
-          SqlSortBuilder.ensureSortOrder(options?.order?.toUpperCase(), this.defaultSortOrder)
+          SqlSortBuilder.ensureSortOrder(
+            options?.order?.toUpperCase(),
+            this.defaultSortOrder
+          )
         );
         if (this.isValid(o).valid) {
           sortBy.push(o);

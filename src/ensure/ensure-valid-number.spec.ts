@@ -9,7 +9,7 @@ describe('#ensureValidNumber', function () {
       expect(ensureValidNumber(true)).toBe(void 0);
       expect(ensureValidNumber(true, { allowNegative: true })).toBe(void 0);
       expect(ensureValidNumber(false)).toBe(void 0);
-      expect(ensureValidNumber(false, { allowNegative: true  })).toBe(void 0);
+      expect(ensureValidNumber(false, { allowNegative: true })).toBe(void 0);
     });
     test('Zero & Padded value using zeros ', () => {
       expect(ensureValidNumber('0', void 0, {})).toBe(0);
