@@ -194,16 +194,21 @@ describe('ensure', () => {
     });
   });
   describe('eStrict', () => {
-    test('arrayOfNumbers', () => {
-      expect(
-        eProvidedStrict('arrayOfNumbers', [1, 2], { eField: 'bar' })
-      ).toEqual([1, 2]);
-      expect(() =>
+    describe('arrayOfNumbers', () => {
+      it('should accept valid numbers', () => {
+        expect(
+          eProvidedStrict('arrayOfNumbers', [1, 2], { eField: 'bar' })
+        ).toEqual([1, 2]);
+      })
+      it('should throw if input is void', () => expect(() =>
         eStrict('arrayOfNumbers', void 0, { eField: 'bar' })
-      ).toThrow(/Required field "bar" was not provided\./);
-      expect(() => eStrict('arrayOfNumbers', [''], { eField: 'bar' })).toThrow(
+      ).toThrow(/Required field "bar" was not provided\./))
+      it('should throw if input if null', () => expect(() => eStrict('arrayOfNumbers', [''], { eField: 'bar' })).toThrow(
         /Provided value bar is not a valid \"arrayOfNumbers\"./
-      );
+      ))
+      it('should accept empty array', () => {
+        expect(eStrict('arrayOfNumbers', [], { eField: 'bar' })).toStrictEqual([]);
+      })
     });
     test('arrayOf', () => {
       // @todo
