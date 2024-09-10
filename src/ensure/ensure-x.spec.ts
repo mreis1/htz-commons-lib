@@ -144,8 +144,10 @@ describe('ensure', () => {
   });
 
   describe('eProvidedStrictNull', () => {
-    test('string', () => {
-      expect(eProvidedStrictNull('string', '', { eField: 'bar' })).toBe(null);
+    describe('string', () => {
+      it('should ', () => {
+        expect(eProvidedStrictNull('string', '', { eField: 'bar' })).toBe(null);
+      })
     });
   });
 
@@ -154,6 +156,7 @@ describe('ensure', () => {
       expect(() => eProvidedStrict('string', '', { eField: 'bar' })).toThrow(
         /Provided value bar is not a valid \"string\"./
       );
+      expect(eStrictNull('string', '', { eField: 'bar' })).toBeNull();
     });
     test('arrayOfNumbers', () => {
       expect(eProvidedStrict('arrayOfNumbers', void 0, { eField: 'bar' })).toBe(
@@ -193,8 +196,17 @@ describe('ensure', () => {
       ).toStrictEqual(['a']);
     });
   });
+  describe('eProvidedStrict', () => {
+    describe('#string', () => {
+      it('should throw if the string is empty', () => {
+        expect(() => eProvidedStrict('string', '', { eField: 'bar' })).toThrow(
+          /Provided value bar is not a valid \"string\"./
+        );
+      });
+    })
+  })
   describe('eStrict', () => {
-    describe('arrayOfNumbers', () => {
+    describe('#arrayOfNumbers', () => {
       it('should accept valid numbers', () => {
         expect(
           eProvidedStrict('arrayOfNumbers', [1, 2], { eField: 'bar' })
@@ -210,6 +222,64 @@ describe('ensure', () => {
         expect(eStrict('arrayOfNumbers', [], { eField: 'bar' })).toStrictEqual([]);
       })
     });
+    describe('#string', () => {
+      it('should throw if the string is empty', () => {
+        expect(() => eStrict('string', '', { eField: 'bar' })).toThrow(
+          /Provided value bar is not a valid \"string\"./
+        );
+      });
+    })
+    describe('#date', () => {
+      test('Date , DateTime, Timestmap and mixes', () => {
+        // Pass
+        expect(
+          moment.isMoment(
+            eStrict('dateTime', '2022-02-10 10:00:00', { eField: 'bar' })
+          )
+        ).toBe(true);
+        expect(
+          moment.isMoment(eStrict('date', '2022-02-10', { eField: 'bar' }))
+        ).toBe(true);
+        expect(eStrict('time', '10:00:00', { eField: 'bar' })).toStrictEqual({
+          h: 10,
+          m: 0,
+          s: 0,
+          sTime: 36000,
+          str: '10:00:00',
+        });
+        expect(
+          moment.isMoment(
+            eStrict('dateTimeOrTimestamp', '2022-02-10 10:00:00', {
+              eField: 'bar',
+            })
+          )
+        ).toBe(true);
+        expect(
+          moment.isMoment(
+            eStrict('dateTimeOrTimestamp', '2022-02-10T10:00:00.000Z', {
+              eField: 'bar',
+            })
+          )
+        ).toBe(true);
+        expect(
+          moment.isMoment(
+            eStrict('dateOrTimestamp', '2022-02-10', { eField: 'bar' })
+          )
+        ).toBe(true);
+        expect(
+          moment.isMoment(
+            eStrict('dateOrTimestamp', '2022-02-10T10:00:00.000Z', {
+              eField: 'bar',
+            })
+          )
+        ).toBe(true);
+        // Throw
+        // @todo
+        /*expect(eProvidedStrict('arrayOfNumbers', [1,2], { eField: 'bar' })).toEqual([1,2]);
+        expect(() => eStrict('arrayOfNumbers', void 0, { eField: 'bar' })).toThrow(/Required field "bar" was not provided\./);
+        expect(() => eStrict('arrayOfNumbers', [""], { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);*/
+      })
+    })
     test('arrayOf', () => {
       // @todo
       /*expect(eProvidedStrict('arrayOfNumbers', [1,2], { eField: 'bar' })).toEqual([1,2]);
@@ -217,59 +287,7 @@ describe('ensure', () => {
       expect(() => eStrict('arrayOfNumbers', [""], { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);*/
     });
 
-    test('string', () => {
-      expect(() => eStrict('string', '', { eField: 'bar' })).toThrow(
-        /Provided value bar is not a valid \"string\"./
-      );
-    });
-    test('Date , DateTime, Timestmap and mixes', () => {
-      // Pass
-      expect(
-        moment.isMoment(
-          eStrict('dateTime', '2022-02-10 10:00:00', { eField: 'bar' })
-        )
-      ).toBe(true);
-      expect(
-        moment.isMoment(eStrict('date', '2022-02-10', { eField: 'bar' }))
-      ).toBe(true);
-      expect(eStrict('time', '10:00:00', { eField: 'bar' })).toStrictEqual({
-        h: 10,
-        m: 0,
-        s: 0,
-        sTime: 36000,
-        str: '10:00:00',
-      });
-      expect(
-        moment.isMoment(
-          eStrict('dateTimeOrTimestamp', '2022-02-10 10:00:00', {
-            eField: 'bar',
-          })
-        )
-      ).toBe(true);
-      expect(
-        moment.isMoment(
-          eStrict('dateTimeOrTimestamp', '2022-02-10T10:00:00.000Z', {
-            eField: 'bar',
-          })
-        )
-      ).toBe(true);
-      expect(
-        moment.isMoment(
-          eStrict('dateOrTimestamp', '2022-02-10', { eField: 'bar' })
-        )
-      ).toBe(true);
-      expect(
-        moment.isMoment(
-          eStrict('dateOrTimestamp', '2022-02-10T10:00:00.000Z', {
-            eField: 'bar',
-          })
-        )
-      ).toBe(true);
-      // Throw
-      // @todo
-      /*expect(eProvidedStrict('arrayOfNumbers', [1,2], { eField: 'bar' })).toEqual([1,2]);
-      expect(() => eStrict('arrayOfNumbers', void 0, { eField: 'bar' })).toThrow(/Required field "bar" was not provided\./);
-      expect(() => eStrict('arrayOfNumbers', [""], { eField: 'bar' })).toThrow(/Provided value bar is not a valid \"arrayOfNumbers\"./);*/
-    });
+
+    ;
   });
 });
