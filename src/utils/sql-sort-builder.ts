@@ -147,7 +147,7 @@ export class SqlSortBuilder {
 
   public toString(options: { order: boolean }) {
     let str = '';
-    if (this.sortBy.length) {
+    if (this.sortBy?.length) {
       str = this.sortBy.map((v, i) => v + ' ' + this.sortByOrder[i]).join(',');
     }
     if (options?.order && str !== '') {
