@@ -19,6 +19,10 @@
   },
   "author": "Marcio Reis <hello@marcioreis.pt>",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mreis1/htz-commons-lib.git"
+  },
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@types/moment": "^2.13.0",
