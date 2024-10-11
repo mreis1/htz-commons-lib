@@ -62,7 +62,7 @@ export enum METHOD {
   'string+upper',
   'string+trim',
   'email', // Automatically trims and lowercase the string and verifies if it matches an email regexp
-  'keep'
+  'keep',
 }
 export type Method = keyof typeof METHOD;
 

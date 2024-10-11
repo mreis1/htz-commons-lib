@@ -38,7 +38,7 @@ export function option<T extends Method>(
   method: T,
   options?: Omit<PropOption<T>, 'type' | 'value'>
 ): PropOption<T> {
-  options ??= ({} as any);
+  options ??= {} as any;
   options.options = options.options || ({} as any);
   return {
     ...(options as PropOption<T>),
