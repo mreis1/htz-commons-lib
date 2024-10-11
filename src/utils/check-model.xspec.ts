@@ -1,4 +1,4 @@
-import { checkModel, createInstance, option } from './check-model';
+import { createInstance, option } from './check-model';
 class CustomError extends Error {
   constructor(...args) {
     super(...args);
@@ -7,6 +7,47 @@ class CustomError extends Error {
 }
 
 describe('checkModel', () => {
+  describe('in model definition option should not required additional options', () => {
+      it('"mode" should default to "strict_if_not_provided"', () => {
+        let o = createInstance({
+          // async: true,
+          errorBuilder: (options) => {
+            const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
+            return new CustomError(x);
+          },
+        });
+        expect(o({ test: true }, {
+          test: option('bool')
+        }).test).toBe(true);
+        expect(o({  } as {test?: boolean}, {
+          test: option('bool')
+        }).test).toBeUndefined();
+        expect(() => {
+          o({ test: 'aaa' }, {
+            test: option('bool')
+          })
+        }).toThrow();
+      })
+  })
+  describe('keep value', () => {
+      it('"mode" should default to "strict_if_not_provided"', () => {
+        let o = createInstance({
+          // async: true,
+          errorBuilder: (options) => {
+            const x = `Field ${options.options.eField ?? '-'} has incorrect value`;
+            return new CustomError(x);
+          },
+        });
+        const  res = o({ test: 'dasdasda', b: 'sad', a: 12312, c: 'aaa' }, {
+          b: option('string'),
+          test: option('keep'),
+          a: option('number'),
+          c: void 0       // c has the value of 'aaa' but it wont be exported
+        });
+
+        expect(res).toStrictEqual({ test: 'dasdasda', b: 'sad', a: 12312 });
+      })
+  })
   describe('CustomInstanceAsync', () => {
     let o = createInstance({
       async: true,

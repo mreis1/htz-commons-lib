@@ -62,6 +62,7 @@ export enum METHOD {
   'string+upper',
   'string+trim',
   'email', // Automatically trims and lowercase the string and verifies if it matches an email regexp
+  'keep'
 }
 export type Method = keyof typeof METHOD;
 
@@ -93,6 +94,8 @@ export type Options<T extends Method> =
             // Arrays
               T extends 'arrayOf' ? { validatorFn: ArrayOfValidatorFn } :
                 T extends 'arrayOfNumbers' ? ArrayOfNumberOptionsWithDefaults :
+            // Utilities
+                T extends 'keep' ? {} :
                   never;
 
 // prettier-ignore
@@ -120,6 +123,7 @@ export type OperationOutput<T extends Method> =
             // Arrays
             T extends 'arrayOf' ? ReturnType<typeof ensureArrayOfNumbers> :
               T extends 'arrayOfNumbers' ? ReturnType<typeof ensureArrayOfNumbers> :
+                T extends 'keep' ?  ReturnType<typeof ensureArrayOfNumbers> :
                 never;
 
 // export interface EnsureResultBase<T extends Method> {
@@ -222,6 +226,7 @@ export function ensureX<T extends Method, Y extends boolean>(
   options?: EnsureOptions<T>
 ): EnsureOutput<T, Y> {
   options = options || ({} as any);
+  if (method === 'keep') return value;
   let mode = options.eMode ?? 'SOFT';
   let defaultValue = options.defaultValue; // default = void 0
   /**

@@ -9,7 +9,10 @@ import {
 export interface PropOption<T extends Method> {
   value: any;
   type: T;
-  mode: Mode;
+  /**
+   * @default strict_if_provided
+   */
+  mode?: Mode;
   /**
    * @default false
    */
@@ -33,8 +36,9 @@ export type ModelOption<T> = Record<keyof T, Omit<PropOption<any>, 'value'>>;
 
 export function option<T extends Method>(
   method: T,
-  options: Omit<PropOption<T>, 'type' | 'value'>
+  options?: Omit<PropOption<T>, 'type' | 'value'>
 ): PropOption<T> {
+  options ??= ({} as any);
   options.options = options.options || ({} as any);
   return {
     ...(options as PropOption<T>),
@@ -107,7 +111,7 @@ export function checkModel<T extends {}>(
       const o: PropOption<any> = modelDef[key];
       let opts = {
         ...o.options,
-        eMode: o.mode,
+        eMode: o.mode ?? 'strict_if_provided',
         eField: key,
         allowNull: o.allowNull,
         errorBuilder: options.errorBuilder,
