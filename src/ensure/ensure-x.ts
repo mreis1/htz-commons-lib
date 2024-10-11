@@ -123,7 +123,7 @@ export type OperationOutput<T extends Method> =
             // Arrays
             T extends 'arrayOf' ? ReturnType<typeof ensureArrayOfNumbers> :
               T extends 'arrayOfNumbers' ? ReturnType<typeof ensureArrayOfNumbers> :
-                T extends 'keep' ?  ReturnType<typeof ensureArrayOfNumbers> :
+                T extends 'keep' ?  any:
                 never;
 
 // export interface EnsureResultBase<T extends Method> {
